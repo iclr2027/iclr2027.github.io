@@ -8,20 +8,23 @@
 <title>Auditing Attribution by Conditioning Provenance in Any-Stem Music Generation</title>
 <style>
 :root{--bg:#F7F9FA;--card:#FFFFFF;--ink:#1A2430;--muted:#5A6B7A;--hair:#E1E7EC;
-  --acc:#D55E00;--acc2:#0072B2;--good:#0B7A4B;--bad:#c0392b;--soft:#FFF4EC;--vio:#6A4CB0;--teal:#0E7C86;--navh:50px}
+  --acc:#D55E00;--acc2:#0072B2;--good:#0B7A4B;--bad:#c0392b;--soft:#FFF4EC;--vio:#6A4CB0;--teal:#0E7C86;--navh:50px;
+  --s0:#D55E00;--s1:#0E7C86;--s2:#6A4CB0;--s3:#B07A00;--s4:#C2185B;--s5:#2E7D32;--ctxc:#0072B2}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#171F28;
-  --ink:#E8ECF0;--muted:#94A3B0;--hair:#26303B;--acc:#FF8B42;--acc2:#57A8E8;--good:#3FBF87;--bad:#e05545;--soft:#2A1F16;--vio:#A98CE8;--teal:#4CC3CD}}
+  --ink:#E8ECF0;--muted:#94A3B0;--hair:#26303B;--acc:#FF8B42;--acc2:#57A8E8;--good:#3FBF87;--bad:#e05545;--soft:#2A1F16;--vio:#A98CE8;--teal:#4CC3CD;
+  --s0:#FF8B42;--s1:#4CC3CD;--s2:#A98CE8;--s3:#E0B040;--s4:#F06292;--s5:#66BB6A;--ctxc:#57A8E8}}
 :root[data-theme="dark"]{--bg:#10161D;--card:#171F28;--ink:#E8ECF0;--muted:#94A3B0;--hair:#26303B;
-  --acc:#FF8B42;--acc2:#57A8E8;--good:#3FBF87;--bad:#e05545;--soft:#2A1F16;--vio:#A98CE8;--teal:#4CC3CD}
+  --acc:#FF8B42;--acc2:#57A8E8;--good:#3FBF87;--bad:#e05545;--soft:#2A1F16;--vio:#A98CE8;--teal:#4CC3CD;
+  --s0:#FF8B42;--s1:#4CC3CD;--s2:#A98CE8;--s3:#E0B040;--s4:#F06292;--s5:#66BB6A;--ctxc:#57A8E8}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font:15.5px/1.6 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  padding:calc(var(--navh) + 22px) 16px 90px;max-width:980px;margin:0 auto}
-h1{font-size:23px;line-height:1.3;margin-bottom:8px}
-h2{font-size:19px;margin:0 0 8px}
-p{margin:6px 0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  padding:calc(var(--navh) + 20px) 16px 80px;max-width:980px;margin:0 auto}
+h1{font-size:22px;line-height:1.3;margin-bottom:6px}
+h2{font-size:18px;margin:0 0 6px}
+p{margin:5px 0}
 a{color:var(--acc2)}
-.muted{color:var(--muted);font-size:13.5px}
+.muted{color:var(--muted);font-size:13px}
 kbd{font:10.5px/1.3 ui-monospace,Menlo,monospace;border:1px solid var(--hair);border-bottom-width:2px;
   border-radius:4px;padding:0 4px;color:var(--muted);margin-right:3px;vertical-align:1px}
 #nav{position:fixed;top:0;left:0;right:0;height:var(--navh);z-index:50;background:var(--card);border-bottom:1px solid var(--hair);
@@ -33,41 +36,40 @@ kbd{font:10.5px/1.3 ui-monospace,Menlo,monospace;border:1px solid var(--hair);bo
 #nav a.lnk.on{color:var(--acc);font-weight:650}
 #nav .sp{flex:1 1 auto}
 #theme{font-size:12px;padding:3px 10px;border:1px solid var(--hair);border-radius:12px;background:transparent;color:var(--muted);cursor:pointer}
-header{margin-bottom:8px}
+header{margin-bottom:6px}
 header .authors{font-size:14px;color:var(--ink);margin:2px 0}
-header .sub{margin-top:2px}
-section{scroll-margin-top:calc(var(--navh) + 12px);margin:26px 0 0;padding-top:14px;border-top:1px solid var(--hair)}
+section{scroll-margin-top:calc(var(--navh) + 12px);margin:22px 0 0;padding-top:12px;border-top:1px solid var(--hair)}
 section:first-of-type{border-top:0;padding-top:0}
 .intro{max-width:860px}
-.intro p{margin:6px 0}
-figure.fig{margin:14px 0 6px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:12px 14px}
-figure.fig img{display:block;width:100%;height:auto;max-height:560px;object-fit:contain;background:#fff;border-radius:6px}
-figure.fig figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.45}
-.card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 18px;margin:14px 0}
+.intro p{margin:4px 0}
+figure.fig{margin:12px 0 4px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:10px 14px}
+figure.fig svg{display:block;width:100%;height:auto;max-height:520px;margin:0 auto;font-family:inherit}
+figure.fig figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+.card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:12px 16px;margin:12px 0}
 .card:focus-within{border-color:var(--acc)}
 .head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:2px}
-.head .i{font-weight:700;font-size:16px}
-.head .s{color:var(--muted);font-size:13px}
+.head .i{font-weight:700;font-size:15.5px}
+.head .s{color:var(--muted);font-size:12.5px}
 .head .cid{margin-left:auto;font:11px ui-monospace,Menlo,monospace;color:var(--muted);border:1px solid var(--hair);border-radius:6px;padding:0 6px}
-.badges{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 2px}
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:20px;padding:0 9px;border-radius:11px;
   background:var(--soft);border:1px solid var(--hair);color:var(--ink)}
 .badge .bv{font-weight:700;font-family:ui-monospace,Menlo,monospace;color:var(--acc)}
-.note{font-size:13.5px;color:var(--ink);background:var(--soft);border-radius:6px;padding:6px 10px;margin:6px 0 8px}
-.group{margin-top:10px;padding-top:8px;border-top:1px dashed var(--hair)}
+.note{font-size:13px;color:var(--muted);margin:4px 0 4px}
+.group{margin-top:8px;padding-top:6px;border-top:1px dashed var(--hair)}
 .group:first-of-type{border-top:0}
-.glab{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:2px}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px 18px}
-.row{display:flex;gap:8px;align-items:center;padding:3px 0;min-width:0}
-.play{width:32px;height:32px;min-width:32px;border-radius:50%;border:1.5px solid var(--acc);
-  background:transparent;color:var(--acc);font-size:11px;cursor:pointer;padding:0}
+.glab{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:1px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px}
+.row{display:flex;gap:7px;align-items:center;padding:2px 0;min-width:0;--sc:var(--acc)}
+.play{width:28px;height:28px;min-width:28px;border-radius:50%;border:1.5px solid var(--sc);
+  background:transparent;color:var(--sc);font-size:10px;cursor:pointer;padding:0}
 .play:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
-.row.playing .play{background:var(--acc);color:#fff}
+.row.playing .play{background:var(--sc);color:#fff}
 .row.err .play{border-color:var(--bad);color:var(--bad);opacity:.6}
-.rlab{min-width:172px;max-width:172px;font-size:12.5px;color:var(--ink);line-height:1.25}
+.rlab{min-width:160px;max-width:160px;font-size:12px;color:var(--ink);line-height:1.2}
 .rlab .dur{color:var(--muted);white-space:nowrap}
-.sys{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;line-height:15px;
-  padding:0 6px;border-radius:8px;border:1px solid var(--muted);color:var(--muted);margin:0 4px 1px 0;vertical-align:1px}
+.sys{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;line-height:14px;
+  padding:0 5px;border-radius:8px;border:1px solid var(--muted);color:var(--muted);margin:0 4px 1px 0;vertical-align:1px}
 .sys.ctx{color:var(--acc2);border-color:var(--acc2)}
 .sys.prompt{color:var(--acc);border-color:var(--acc)}
 .sys.ours{background:var(--good);border-color:var(--good);color:#fff}
@@ -77,15 +79,50 @@ figure.fig figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-heig
 .sys.hit{background:var(--bad);border-color:var(--bad);color:#fff}
 .sys.regen{color:var(--good);border-color:var(--good)}
 .sys.ref{color:var(--muted);border-color:var(--hair);background:var(--soft)}
-canvas.wave{flex:1 1 0;width:0;min-width:0;height:38px;cursor:pointer;display:block}
-footer{margin-top:40px;padding-top:12px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
+canvas.wave{flex:1 1 0;width:0;min-width:0;height:32px;cursor:pointer;display:block}
+/* any-stem card: figure-shaped player */
+.genfig{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:0;margin-top:8px;align-items:stretch}
+.gpanel{display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--hair);border-radius:12px;padding:8px 10px;min-width:0}
+.ptitle{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;height:22px;line-height:22px;text-align:center}
+.pspace{flex:1 1 auto;min-height:26px;position:relative}
+.gpanel.right .pspace::before{content:'';position:absolute;left:50%;top:4px;bottom:9px;border-left:2px solid var(--muted)}
+.gpanel.right .pspace::after{content:'';position:absolute;left:50%;bottom:4px;margin-left:-4px;border:4px solid transparent;border-top:6px solid var(--muted);border-bottom:0}
+.row.g{height:46px;gap:6px;border-radius:9px;padding:0 6px;background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--sc);margin:3px 0}
+.row.g .rlab{min-width:0;max-width:none;flex:0 0 auto;width:78px;font-weight:600;font-size:12px;color:var(--sc)}
+.row.g .rlab .dur{display:block;font-weight:400;font-size:10.5px}
+.row.g canvas.wave{height:30px}
+.sw{display:inline-flex;border:1px solid var(--hair);border-radius:7px;overflow:hidden;flex:0 0 auto}
+.sw button{font-size:10.5px;line-height:20px;padding:0 6px;border:0;background:transparent;color:var(--muted);cursor:pointer;border-left:1px solid var(--hair)}
+.sw button:first-child{border-left:0}
+.sw button.on{background:var(--sc);color:#fff;font-weight:700}
+.sw button:focus-visible{outline:2px solid var(--acc2);outline-offset:-2px}
+.gmid{display:flex;flex-direction:column;min-width:0;padding:8px 0}
+.gmid .ptitle{visibility:hidden}
+.garr{display:flex;align-items:center;justify-content:center}
+.garr .ar{flex:1 1 0;height:2px;background:var(--muted);position:relative}
+.garr .ar::after{content:'';position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--muted);border-right:0}
+.garr .box{flex:0 0 auto;background:var(--ink);color:var(--bg);font-weight:700;font-size:12.5px;line-height:1.2;text-align:center;
+  padding:12px 8px;border-radius:10px;width:96px}
+.gbot{height:52px;display:flex;align-items:center}
+.gbot .ar{flex:1 1 0;height:2px;background:var(--muted);position:relative}
+.gbot .ar::after{content:'';position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--muted);border-right:0}
+.row.g.mix .plus{flex:0 0 auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);font-size:13px;line-height:15px;text-align:center;margin-right:-2px}
+footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
 #loadMsg{margin:20px 0}
-@media (max-width:700px){
-  body{padding-left:10px;padding-right:10px;font-size:15px}
+@media (max-width:760px){
+  body{padding-left:10px;padding-right:10px;font-size:14.5px}
   .grid{grid-template-columns:minmax(0,1fr)}
-  .rlab{min-width:126px;max-width:126px;font-size:12px}
+  .rlab{min-width:126px;max-width:126px;font-size:11.5px}
   .head .cid{margin-left:0}
   figure.fig{padding:8px}
+  .genfig{grid-template-columns:minmax(0,1fr)}
+  .gmid{padding:4px 0}
+  .gmid .ptitle,.gmid .pspace,.gbot{display:none}
+  .garr{height:auto !important;flex-direction:column}
+  .garr .ar{width:2px;height:18px;flex:0 0 auto}
+  .garr .ar::after{right:-4px;top:auto;bottom:-1px;border:5px solid transparent;border-top:7px solid var(--muted);border-bottom:0}
+  .gpanel .pspace{min-height:6px}
+  .gpanel.right .pspace::before,.gpanel.right .pspace::after{display:none}
 }
 </style>
 </head>
@@ -96,7 +133,7 @@ footer{margin-top:40px;padding-top:12px;border-top:1px solid var(--hair);font-si
 <h1 id="pageTitle"></h1>
 <p class="authors" id="authors"></p>
 <p class="muted sub" id="subtitle"></p>
-<p class="muted" id="keysNote" style="font-size:12.5px;margin-top:6px"><b>Keys</b> &nbsp; <kbd>Space</kbd> stop &nbsp; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> seek 1 s &nbsp; <kbd>Tab</kbd> next row &nbsp; <kbd>Enter</kbd> play the focused row &nbsp;&middot;&nbsp; click a waveform to play from that point. Headphones recommended.</p>
+<p class="muted" id="keysNote" style="font-size:12px;margin-top:4px"><kbd>Space</kbd> stop &nbsp; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> seek 1 s &nbsp;&middot;&nbsp; click a waveform to play from there. Headphones recommended.</p>
 </header>
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
@@ -111,6 +148,7 @@ const bufs = new Map();
 const WAVES = [];
 const PLAY = '\u25B6', PAUSE = '\u275A\u275A';
 const SYS = {ctx: 'Context', prompt: 'Prompt', ours: 'Ours', ace: 'ACE-Step', real: 'Real', mix: 'Mix', hit: 'Training match', regen: 'Regenerated', ref: 'Reference'};
+const SWL = {ours: 'Ours', ace: 'ACE-Step', real: 'Real'};
 const FIG_AT = {overview: 'fig1', mem: 'tree'};
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 
@@ -132,7 +170,7 @@ document.getElementById('theme').onclick = () => {
 applyTheme(THEMES.includes(store.get()) ? store.get() : 'auto');
 
 // -- audio engine (from the listening-test page) --
-function redrawAll(){ WAVES.forEach(([cv, pk]) => { if (!current || current.args[2] !== cv) drawWave(cv, pk); }); }
+function redrawAll(){ WAVES.forEach(w => { if (!current || current.args[2] !== w[0]) drawWave(w[0], w[1]); }); }
 window.addEventListener('resize', redrawAll);
 function stopAll(){ if (current){ try { current.stop(); } catch (e) {} current = null; } }
 function ensureCtx(){
@@ -157,7 +195,8 @@ function drawWave(cv, pkB64, prog){
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
   g.clearRect(0, 0, W, H);
   const cs = getComputedStyle(document.documentElement);
-  const cAcc = cs.getPropertyValue('--acc').trim(), cHair = cs.getPropertyValue('--hair').trim(),
+  const cRow = getComputedStyle(cv).getPropertyValue('--sc').trim();
+  const cAcc = cRow || cs.getPropertyValue('--acc').trim(), cHair = cs.getPropertyValue('--hair').trim(),
         cMut = cs.getPropertyValue('--muted').trim();
   const n = raw.length, bw = W / n;
   g.fillStyle = cHair; g.fillRect(0, H / 2 - .5, W, 1);
@@ -195,31 +234,173 @@ async function playRow(url, rowEl, cv, pk, offset){
     raf = requestAnimationFrame(tick);
   })();
 }
+// Wire a play button and a waveform canvas to a mutable clip; sel() returns the current [name, peaks, dur].
+function wireRow(div, sel){
+  const cv = div.querySelector('canvas'), btn = div.querySelector('.play');
+  const url = () => 'audio/' + sel()[0] + '.mp3';
+  btn.onclick = () => playRow(url(), div, cv, sel()[1], undefined);
+  cv.onclick = async ev => {
+    ensureCtx();
+    let buf; try { buf = await getBuf(url()); } catch (e) { div.classList.add('err'); return; }
+    const r = ev.target.getBoundingClientRect();
+    playRow(url(), div, cv, sel()[1], (ev.clientX - r.left) / r.width * buf.duration);
+  };
+  const w = [cv, sel()[1]];
+  WAVES.push(w);
+  requestAnimationFrame(() => drawWave(cv, w[1]));
+  return w;
+}
 function audioRow(row){
   const [name, pk, dur] = row.clip;
-  const url = 'audio/' + name + '.mp3';
   const sys = /^[a-z]+$/.test(row.sys || '') ? row.sys : 'ref';
   const div = document.createElement('div');
   div.className = 'row'; div.dataset.sys = sys;
   div.innerHTML = `<button class="play" type="button" title="play / stop" aria-label="play ${esc(row.label)}">${PLAY}</button>` +
     `<div class="rlab"><span class="sys ${sys}">${esc(SYS[sys] || sys)}</span>${esc(row.label)} <span class="dur">${esc(dur)} s</span></div>` +
     `<canvas class="wave" title="play from here"></canvas>`;
-  const cv = div.querySelector('canvas');
-  div.querySelector('.play').onclick = () => playRow(url, div, cv, pk, undefined);
-  cv.onclick = async ev => {
-    ensureCtx();
-    let buf; try { buf = await getBuf(url); } catch (e) { div.classList.add('err'); return; }
-    const r = ev.target.getBoundingClientRect();
-    playRow(url, div, cv, pk, (ev.clientX - r.left) / r.width * buf.duration);
-  };
-  WAVES.push([cv, pk]);
-  requestAnimationFrame(() => drawWave(cv, pk));
+  wireRow(div, () => row.clip);
   return div;
 }
+// A figure-style row: colored, optional system switch selecting among {ours, ace, real} clips.
+function genRow(label, color, opts, extraClass){
+  const div = document.createElement('div');
+  div.className = 'row g' + (extraClass ? ' ' + extraClass : ''); div.style.setProperty('--sc', color);
+  const keys = Object.keys(opts);
+  let curKey = keys[0];
+  const clip = () => opts[curKey].clip;
+  div.innerHTML = (extraClass === 'mix' ? '<span class="plus">+</span>' : '') +
+    `<button class="play" type="button" title="play / stop" aria-label="play ${esc(label)}">${PLAY}</button>` +
+    `<div class="rlab">${esc(label)}<span class="dur">${esc(clip()[2])} s</span></div>` +
+    `<canvas class="wave" title="play from here"></canvas>` +
+    (keys.length > 1 ? '<div class="sw" role="group" aria-label="system">' +
+      keys.map(k => `<button type="button" data-k="${esc(k)}" class="${k === curKey ? 'on' : ''}">${esc(SWL[k] || k)}</button>`).join('') + '</div>' : '');
+  const w = wireRow(div, clip);
+  div.querySelectorAll('.sw button').forEach(b => b.onclick = () => {
+    if (b.dataset.k === curKey) return;
+    if (current && current.args[1] === div) stopAll();
+    curKey = b.dataset.k;
+    div.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x === b));
+    div.querySelector('.dur').textContent = clip()[2] + ' s';
+    w[1] = clip()[1]; drawWave(w[0], w[1]);
+  });
+  return div;
+}
+const stemColor = i => `var(--s${i % 6})`;
+
+// -- inline figures (theme-aware via CSS variables) --
+function wavePath(x, y, n, amp){
+  let d = `M${x} ${y}`;
+  for (let i = 0; i < n; i++) d += ` q5 ${-amp} 10 0 q5 ${amp} 10 0`;
+  return d;
+}
+function figConcept(){
+  const P = [['Prompt 1', 'var(--s0)'], ['Prompt 2', 'var(--s1)'], ['Prompt N', 'var(--s2)']];
+  const S = [['Stem 1', 'var(--s0)'], ['Stem 2', 'var(--s1)'], ['Stem N', 'var(--s2)']];
+  const ys = [64, 104, 158];
+  const pill = (x, y, w, c, txt) => `<rect x="${x}" y="${y}" width="${w}" height="30" rx="7" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-width="1.3"/>` +
+    `<path d="${wavePath(x + 12, y + 15, 3, 7)}" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/>` +
+    `<text x="${x + w - 12}" y="${y + 15}" text-anchor="end" dominant-baseline="central" font-size="13" font-weight="600" fill="${c}">${txt}</text>`;
+  const dots = (x, y) => `<circle cx="${x}" cy="${y - 8}" r="1.8" fill="var(--muted)"/><circle cx="${x}" cy="${y}" r="1.8" fill="var(--muted)"/><circle cx="${x}" cy="${y + 8}" r="1.8" fill="var(--muted)"/>`;
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" role="img" aria-label="Concept figure: registered prompts and context go into the any-stem generator, which produces one stem per prompt; the generated stems and the context sum to one mix">`;
+  s += `<defs><marker id="carr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="var(--muted)"/></marker></defs>`;
+  s += `<g font-family="inherit">`;
+  // left panel
+  s += `<rect x="16" y="14" width="260" height="262" rx="12" fill="var(--bg)" stroke="var(--hair)"/>`;
+  s += `<text x="146" y="36" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="700" fill="var(--ink)">Registered audio</text>`;
+  P.forEach((p, i) => { s += pill(40, ys[i], 212, p[1], p[0]); });
+  s += dots(146, 141);
+  s += `<rect x="40" y="222" width="212" height="34" rx="7" fill="var(--ctxc)" fill-opacity=".12" stroke="var(--ctxc)" stroke-width="1.3"/>`;
+  s += `<path d="${wavePath(52, 239, 6, 9)}" fill="none" stroke="var(--ctxc)" stroke-width="1.6" stroke-linecap="round"/>`;
+  s += `<text x="240" y="239" text-anchor="end" dominant-baseline="central" font-size="13" font-weight="600" fill="var(--ctxc)">Context</text>`;
+  // center block
+  s += `<line x1="276" y1="126" x2="318" y2="126" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
+  s += `<rect x="322" y="76" width="140" height="100" rx="12" fill="var(--ink)"/>`;
+  s += `<text x="392" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-weight="700" fill="var(--bg)">Any-stem</text>`;
+  s += `<text x="392" y="138" text-anchor="middle" dominant-baseline="central" font-size="16" font-weight="700" fill="var(--bg)">generator</text>`;
+  s += `<line x1="462" y1="126" x2="504" y2="126" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
+  // right panel
+  s += `<rect x="508" y="14" width="236" height="196" rx="12" fill="var(--bg)" stroke="var(--hair)"/>`;
+  s += `<text x="626" y="36" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="700" fill="var(--ink)">Generated stems</text>`;
+  S.forEach((p, i) => { s += pill(528, ys[i], 196, p[1], p[0]); });
+  s += dots(626, 141);
+  // sum node and one mix
+  s += `<line x1="626" y1="210" x2="626" y2="228" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
+  s += `<line x1="252" y1="239" x2="608" y2="239" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
+  s += `<circle cx="626" cy="239" r="13" fill="var(--card)" stroke="var(--muted)" stroke-width="1.6"/>`;
+  s += `<text x="626" y="239" text-anchor="middle" dominant-baseline="central" font-size="17" font-weight="700" fill="var(--muted)">+</text>`;
+  s += `<line x1="639" y1="239" x2="662" y2="239" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
+  s += `<text x="668" y="239" dominant-baseline="central" font-size="14" font-weight="700" fill="var(--ink)">One mix</text>`;
+  s += `</g></svg>`;
+  return s;
+}
+function figTree(){
+  const q = (x, y, t1, t2) => `<g class="q"><rect x="${x}" y="${y}" width="280" height="56" rx="8"/>` +
+    `<text class="t1" x="${x + 140}" y="${y + (t2 ? 18 : 28)}" text-anchor="middle" dominant-baseline="central">${t1}</text>` +
+    (t2 ? `<text class="t2" x="${x + 140}" y="${y + 36}" text-anchor="middle" dominant-baseline="central">${t2}</text>` : '') + `</g>`;
+  const nd = (cls, x, y, w, t1, t2) => `<g class="${cls}"><rect x="${x}" y="${y}" width="${w}" height="56" rx="8"/>` +
+    `<text class="t1" x="${x + w / 2}" y="${y + (t2 ? 18 : 28)}" text-anchor="middle" dominant-baseline="central">${t1}</text>` +
+    (t2 ? `<text class="t2" x="${x + w / 2}" y="${y + 36}" text-anchor="middle" dominant-baseline="central">${t2}</text>` : '') + `</g>`;
+  const pill = (cls, x, y, w, t) => `<g class="b ${cls}"><rect x="${x}" y="${y}" width="${w}" height="18" rx="9"/><text x="${x + w / 2}" y="${y + 9}" text-anchor="middle" dominant-baseline="central">${t}</text></g>`;
+  const ln = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="e" marker-end="url(#tarr)"/>`;
+  const lb = (x, y, t, anchor) => `<text class="l" x="${x}" y="${y}" text-anchor="${anchor || 'middle'}" dominant-baseline="central">${t}</text>`;
+  const D = '&#183;';
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 8 760 606" role="img" aria-label="Verdict decision tree of the memorization audit">`;
+  s += `<defs><marker id="tarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`;
+  s += `<style>
+    .q rect{fill:var(--bg);stroke:var(--muted);stroke-width:.8}
+    .q .t1{font-size:14px;font-weight:650;fill:var(--ink)}
+    .q .t2,.n .t2,.bad .t2{font-size:11px;fill:var(--muted)}
+    .n rect{fill:var(--card);stroke:var(--hair);stroke-width:.8}
+    .n .t1{font-size:13.5px;font-weight:600;fill:var(--muted)}
+    .bad rect{fill:var(--soft);stroke:var(--acc);stroke-width:1.2}
+    .bad .t1{font-size:14px;font-weight:700;fill:var(--acc)}
+    .e{fill:none;stroke:var(--muted);stroke-width:1.2}
+    .l{font-size:11.5px;fill:var(--muted)}
+    .b rect{fill:var(--soft);stroke:var(--acc);stroke-width:.8}
+    .b text{font-size:11px;font-weight:700;fill:var(--acc)}
+    .b.g rect{fill:var(--card);stroke:var(--hair)} .b.g text{fill:var(--muted);font-weight:600}
+    .b.bl rect{fill:var(--card);stroke:var(--acc2)} .b.bl text{fill:var(--acc2)}
+    .memb rect{fill:var(--card);stroke:var(--acc2);stroke-width:1.2}
+    .memb .t1{fill:var(--acc2);font-weight:700}
+  </style></defs><g font-family="inherit">`;
+  s += q(236, 26, `0 ${D} Dataset stem duplicate?`, 'The same stem registered more than once');
+  s += pill('g', 400, 17, 126, `25 ${D} 100% ${D} 5.0%`);
+  s += ln(236, 54, 182, 54) + lb(208, 44, 'yes');
+  s += nd('n memb', 8, 26, 168, `A ${D} Duplicate`, 'Excluded');
+  s += pill('bl', 76, 17, 110, `10 ${D} 40% ${D} 2.0%`);
+  s += ln(376, 82, 376, 126) + lb(388, 100, 'no', 'start');
+  s += q(236, 126, `1 ${D} Same composition?`, 'Melody or chord progression matches');
+  s += pill('g', 408, 117, 118, `15 ${D} 60% ${D} 3.0%`);
+  s += ln(516, 154, 570, 154) + lb(543, 142, 'no');
+  s += nd('n', 576, 126, 168, `B ${D} Unrelated`, '');
+  s += pill('g', 636, 117, 118, `13 ${D} 52% ${D} 2.6%`);
+  s += ln(376, 182, 376, 226) + lb(388, 200, 'yes', 'start');
+  s += q(236, 226, `2 ${D} Commonplace pattern?`, 'One&#8211;two notes, a stock chord progression');
+  s += pill('g', 416, 217, 110, `2 ${D} 8% ${D} 0.4%`);
+  s += ln(516, 254, 570, 254) + lb(543, 242, 'yes');
+  s += nd('n', 576, 226, 168, `C ${D} Commonplace`, 'Not memorization');
+  s += pill('g', 644, 217, 110, `1 ${D} 4% ${D} 0.2%`);
+  s += ln(376, 282, 376, 326) + lb(388, 300, 'no', 'start');
+  s += q(236, 326, `3 ${D} Same timbre?`, 'Reproduced at the recording level');
+  s += pill('g', 424, 317, 102, `1 ${D} 4% ${D} 0.2%`);
+  s += ln(236, 354, 182, 354) + lb(208, 344, 'yes');
+  s += nd('bad', 8, 326, 168, `Type I ${D} Recording`, 'The recording reproduced');
+  s += pill('', 84, 317, 102, `1 ${D} 4% ${D} 0.2%`);
+  s += ln(376, 382, 376, 426) + lb(388, 400, 'no &#8594; composition memorization', 'start');
+  s += q(236, 426, `4 ${D} Core compositional element?`, 'Judged inside the mix');
+  s += pill('g', 432, 417, 94, `0 ${D} 0% ${D} 0%`);
+  s += ln(316, 482, 240, 540) + ln(436, 482, 520, 540) + lb(252, 502, 'yes') + lb(508, 502, 'no');
+  s += nd('bad', 98, 544, 264, `Type II ${D} Composition`, 'Core element copied');
+  s += pill('g', 278, 535, 94, `0 ${D} 0% ${D} 0%`);
+  s += nd('n memb', 405, 544, 264, `D ${D} Incidental`, 'Composition memorized; no infringement');
+  s += pill('g', 585, 535, 94, `0 ${D} 0% ${D} 0%`);
+  s += `</g></svg>`;
+  return s;
+}
+const FIGS = {fig1: figConcept, tree: figTree};
 
 // -- page --
-function buildCard(c){
-  const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
+function cardHead(c){
   let h = `<div class="head"><span class="i">${esc(c.title)}</span>`;
   if (c.sub) h += `<span class="s">${esc(c.sub)}</span>`;
   h += `<span class="cid">${esc(c.id)}</span></div>`;
@@ -228,7 +409,11 @@ function buildCard(c){
       (b.value === undefined || b.value === null || b.value === '' ? '' : `<span class="bv">${esc(b.value)}</span>`) + '</span>').join('') + '</div>';
   }
   if (c.note) h += `<div class="note">${c.note}</div>`;
-  card.innerHTML = h;
+  return h;
+}
+function buildCard(c){
+  const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
+  card.innerHTML = cardHead(c);
   (c.groups || []).forEach(g => {
     const rows = (g.rows || []).filter(r => Array.isArray(r.clip) && r.clip.length >= 3);
     if (!rows.length) return;
@@ -240,9 +425,47 @@ function buildCard(c){
   });
   return card;
 }
-function buildFigure(src, caption, alt){
+// Any-stem card laid out like the concept figure: prompts + context | generator | generated stems + one mix.
+function buildGenCard(c){
+  const rows = {};
+  const stems = [];
+  (c.groups || []).forEach(g => (g.rows || []).forEach(r => {
+    if (!Array.isArray(r.clip) || r.clip.length < 3) return;
+    const k = r.key || '';
+    rows[k] = r;
+    if (k.startsWith('p_')) stems.push({g: k.slice(2), label: g.label || k.slice(2)});
+  }));
+  const ctx = rows.ctx;
+  if (!ctx || !stems.length) return buildCard(c);
+  const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
+  card.innerHTML = cardHead(c);
+  const fig = document.createElement('div'); fig.className = 'genfig';
+  const left = document.createElement('div'); left.className = 'gpanel left';
+  left.innerHTML = '<div class="ptitle">Registered audio</div>';
+  const mid = document.createElement('div'); mid.className = 'gmid';
+  const right = document.createElement('div'); right.className = 'gpanel right';
+  right.innerHTML = '<div class="ptitle">Generated stems</div>';
+  const pick = (base, g) => { const o = {}; ['ours', 'ace', 'real'].forEach(s => { const r = rows[`${base}${s}_${g}`]; if (r) o[s] = r; }); return o; };
+  stems.forEach((st, i) => {
+    left.appendChild(genRow(`${st.label} prompt`, stemColor(i), {prompt: rows[`p_${st.g}`]}));
+    const o = pick('', st.g);
+    if (Object.keys(o).length) right.appendChild(genRow(st.label, stemColor(i), o));
+  });
+  left.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
+  left.appendChild(genRow('Context', 'var(--ctxc)', {ctx: ctx}));
+  right.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
+  const mo = {}; ['ours', 'ace', 'real'].forEach(s => { if (rows['mix_' + s]) mo[s] = rows['mix_' + s]; });
+  if (Object.keys(mo).length) right.appendChild(genRow('One mix', 'var(--teal)', mo, 'mix'));
+  const n = stems.length;
+  mid.innerHTML = `<div class="ptitle">.</div><div class="garr" style="height:${n * 52}px"><span class="ar"></span>` +
+    `<span class="box">Any-stem<br>generator</span><span class="ar"></span></div><div class="pspace"></div><div class="gbot"><span class="ar"></span></div>`;
+  fig.appendChild(left); fig.appendChild(mid); fig.appendChild(right);
+  card.appendChild(fig);
+  return card;
+}
+function buildFigure(key, caption){
   const f = document.createElement('figure'); f.className = 'fig';
-  f.innerHTML = `<img src="${esc(src)}" alt="${esc(alt || caption || 'figure')}" loading="lazy">` + (caption ? `<figcaption>${caption}</figcaption>` : '');
+  f.innerHTML = FIGS[key]() + (caption ? `<figcaption>${caption}</figcaption>` : '');
   return f;
 }
 function buildSection(sec){
@@ -250,8 +473,8 @@ function buildSection(sec){
   const h = document.createElement('h2'); h.textContent = sec.title; s.appendChild(h);
   if (sec.intro_html){ const d = document.createElement('div'); d.className = 'intro'; d.innerHTML = sec.intro_html; s.appendChild(d); }
   const figKey = sec.figure || FIG_AT[sec.id];
-  if (figKey && D.figures && D.figures[figKey]) s.appendChild(buildFigure(D.figures[figKey], sec.figure_caption || '', sec.title));
-  (sec.cards || []).forEach(c => s.appendChild(buildCard(c)));
+  if (figKey && FIGS[figKey]) s.appendChild(buildFigure(figKey, sec.figure_caption || ''));
+  (sec.cards || []).forEach(c => s.appendChild(sec.id === 'gen' ? buildGenCard(c) : buildCard(c)));
   return s;
 }
 function render(){
