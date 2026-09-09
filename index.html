@@ -397,7 +397,7 @@ function figTree(){
   s += `</g></svg>`;
   return s;
 }
-const FIGS = {fig1: figConcept, tree: figTree};
+const FIGS = {fig1: () => (D.figures && D.figures.fig1_svg) || figConcept(), tree: figTree};
 
 // -- page --
 function cardHead(c){
