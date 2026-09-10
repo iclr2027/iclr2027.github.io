@@ -67,6 +67,24 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
 .pbody{padding:9px 12px 11px;overflow-x:auto}
 .pbody>svg{display:block;width:100%;height:auto;max-height:520px;margin:0 auto;font-family:inherit}
 .pcap{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+/* case coverage of the memorization audit: every verdict case, its count, its examples.
+   The cases with no instance are a result of the audit, so their rows are drawn, not dropped. */
+.ccov{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:10px 12px 12px;margin:10px 0}
+.ccov .ct{font-size:14px;font-weight:700;color:var(--ink)}
+.ccov .csub{font-size:12.5px;color:var(--muted);margin:2px 0 7px;line-height:1.4}
+table.ctab{border-collapse:collapse;width:100%;font-size:12.5px;color:var(--ink)}
+table.ctab th{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+  text-align:left;padding:0 10px 4px 0;border-bottom:1px solid var(--hair);white-space:nowrap}
+table.ctab td{padding:5px 10px 5px 0;border-bottom:1px dotted var(--hair);vertical-align:top}
+table.ctab th.n,table.ctab td.n{text-align:right;padding-right:14px}
+table.ctab td.n{font:700 13px/18px ui-monospace,Menlo,monospace;white-space:nowrap}
+table.ctab .cs{font-weight:700;white-space:nowrap}
+table.ctab .cn{display:block;font-size:11.5px;font-weight:400;color:var(--muted);line-height:1.35;white-space:normal}
+table.ctab tr.z td{background:var(--soft)}
+table.ctab .nf{font-weight:700;color:var(--ink)}
+a.xl{display:inline-block;font:700 11.5px/18px ui-monospace,Menlo,monospace;color:var(--acc2);text-decoration:none;
+  border:1px solid var(--hair);border-radius:7px;padding:0 7px;margin:0 4px 3px 0;background:var(--bg)}
+a.xl:hover,a.xl:focus-visible{border-color:var(--acc);color:var(--acc)}
 /* fallback look for a paper table; template/ptab.css (injected below) may override it */
 .pbody table:not(.ptab){border-collapse:collapse;font-size:12.5px;margin:0 auto;color:var(--ink)}
 .pbody table:not(.ptab) th,.pbody table:not(.ptab) td{padding:3px 8px;text-align:right;white-space:nowrap}
@@ -85,6 +103,9 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
 .chip:hover{border-color:var(--acc)}
 .chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
 .chip.on .cid{color:#fff}
+.chip .ccase{flex:0 0 auto;font-size:11px;font-weight:700;line-height:17px;color:var(--ink);background:var(--bg);
+  border:1px solid var(--hair);border-radius:6px;padding:0 6px;white-space:nowrap}
+.chip.on .ccase{color:#fff;background:transparent;border-color:#fff}
 .chip:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
 .exhost{min-height:64px}
 .card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:12px 16px;margin:8px 0 0}
@@ -94,6 +115,9 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
 .head .s{color:var(--muted);font-size:12.5px}
 .head .fid{flex:0 0 auto;font:700 11.5px/19px ui-monospace,Menlo,monospace;letter-spacing:.02em;color:var(--acc);
   background:var(--soft);border:1px solid var(--acc);border-radius:7px;padding:0 7px}
+/* verdict case of a memorization example (Figure 2 / Table 4): shown on the card head and on every chip */
+.head .ccase{flex:0 0 auto;font-size:12px;font-weight:700;line-height:19px;color:var(--ink);
+  border:1px solid var(--ink);border-radius:7px;padding:0 8px;white-space:nowrap}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 2px}
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:20px;padding:0 9px;border-radius:11px;
   background:var(--soft);border:1px solid var(--hair);color:var(--ink)}
@@ -104,6 +128,22 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
   background:transparent;border:0;border-bottom:1px dotted var(--hair);border-radius:0;line-height:18px}
 .badges.kv .badge .bl{color:var(--muted);white-space:normal;min-width:0}
 .badges.kv .badge .bv{flex:0 0 auto}
+/* six-detector score strip: the same six detectors as paper Figure 3, for one example.
+   A cell that fired is marked three ways, so colour alone never carries it: filled background + thicker
+   accent border, a bullet before the detector name, and a bold value. */
+.dstrip{margin:7px 0 3px}
+.dslab{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.dslab span{font-weight:400;text-transform:none;letter-spacing:0;font-size:11.5px}
+.dgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.dcell{border:1px solid var(--hair);border-radius:9px;background:var(--bg);padding:3px 7px 4px;min-width:0}
+.dcell .dn{display:block;font-size:10.5px;line-height:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dcell .dm{display:inline-block;width:10px;font-size:9px;line-height:14px;vertical-align:1px}
+.dcell .dv{display:block;font:500 13.5px/17px ui-monospace,Menlo,monospace;color:var(--ink)}
+.dcell .dc{display:block;font:11px/14px ui-monospace,Menlo,monospace;color:var(--muted);white-space:nowrap}
+.dcell.hit{border-color:var(--acc);border-width:1.5px;background:var(--soft);padding:2.5px 6.5px 3.5px}
+.dcell.hit .dn,.dcell.hit .dv{color:var(--acc);font-weight:800}
+.dleg{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}
+.dleg b{color:var(--ink);font-weight:700}
 .note{font-size:13px;color:var(--muted);margin:4px 0 4px}
 .group{margin-top:8px;padding-top:6px;border-top:1px dashed var(--hair)}
 .group:first-of-type{border-top:0}
@@ -169,6 +209,9 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-si
   .sws{gap:6px 5px}
   .chip{padding:0 8px;white-space:normal}
   .badges.kv{grid-template-columns:minmax(0,1fr);max-width:none}
+  .dgrid{grid-template-columns:repeat(3,minmax(0,1fr))}   /* two rows of three */
+  .dcell .dv{font-size:13px}
+  table.ctab .cs{white-space:normal}
 }
 /* Paper floats on the demo page: LaTeX tables rendered as HTML (.ptab) and the
    six-panel detector figure (.fig3, two SVG variants switched by theme).
@@ -530,9 +573,38 @@ function floatBlock(blk){
 }
 
 // -- cards --
+// Six-detector score strip: the same six detectors as paper Figure 3 (same names, same thresholds), for this
+// one example. c.detectors = [{det, name, value, cut, flagged, distance}] in the order cards.json gives them
+// (the audit's order; the figure lays the same six out as a 2x3 grid); absent -> nothing is drawn.
+const DOT = '\u25CF';                                     // the non-colour "this detector fired" cue
+const dnum = v => { const x = Number(v); return Math.abs(x) >= 100 ? x.toFixed(1) : x.toFixed(3); };
+function detStrip(c){
+  const ds = (c.detectors || []).filter(d => d && d.name && isFinite(Number(d.value)) && isFinite(Number(d.cut)));
+  if (!ds.length) return '';
+  const cells = ds.map(d => {
+    const on = !!d.flagged, op = d.distance ? '\u2264' : '\u2265';
+    const tip = `${d.name} ${dnum(d.value)}, threshold ${op} ${dnum(d.cut)} (${d.distance ? 'distance' : 'similarity'}): ` +
+      (on ? 'fired' : 'did not fire');
+    return `<div class="dcell${on ? ' hit' : ''}" title="${esc(tip)}">` +
+      `<span class="dn"><span class="dm">${on ? DOT : ''}</span>${esc(d.name)}</span>` +
+      `<span class="dv">${dnum(d.value)}</span><span class="dc">${op} ${dnum(d.cut)}</span></div>`;
+  }).join('');
+  const nm = a => a.map(d => esc(d.name)).join(' / ');
+  const fired = ds.filter(d => d.flagged), dist = ds.filter(d => d.distance), sim = ds.filter(d => !d.distance);
+  let leg = fired.length ? `<b>Fired: ${fired.map(d => esc(d.name)).join(', ')}</b> (${fired.length} of ${ds.length}, marked ${DOT}).`
+                         : `<b>No detector fired</b> (0 of ${ds.length}).`;
+  if (dist.length) leg += ` Distance detectors ${nm(dist)} fire when the value is at or below the threshold` +
+    (sim.length ? `; ${nm(sim)} when it is at or above.` : '.');
+  else if (sim.length) leg += ` ${nm(sim)} fire when the value is at or above the threshold.`;
+  return `<div class="dstrip" role="group" aria-label="detector scores">` +
+    `<div class="dslab">Detector scores <span>the six detectors of Figure 3, for this example</span></div>` +
+    `<div class="dgrid">${cells}</div><div class="dleg">${leg}</div></div>`;
+}
 function cardHead(c){
   // The chip is the paper-float identifier of the card (T2.3); it falls back to the raw card id.
-  let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span><span class="i">${esc(c.title)}</span>`;
+  // A memorization example also prints its verdict case (Figure 2 / Table 4) next to that identifier.
+  let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span>` +
+    (c.case ? `<span class="ccase">${esc(c.case)}</span>` : '') + `<span class="i">${esc(c.title)}</span>`;
   if (c.sub) h += `<span class="s">${esc(c.sub)}</span>`;
   h += `</div>`;
   if (c.badges && c.badges.length){
@@ -541,6 +613,7 @@ function cardHead(c){
       (b.value === undefined || b.value === null || b.value === '' ? '' : `<span class="bv">${esc(b.value)}</span>`) + '</span>').join('') + '</div>';
   }
   if (c.note) h += `<div class="note">${c.note}</div>`;
+  h += detStrip(c);
   return h;
 }
 function buildCard(c){
@@ -636,6 +709,36 @@ function selectExample(sid, idx, opts){
   if (opts.focus && st.chips[idx]) st.chips[idx].focus({preventScroll: true});
   if (opts.hash !== false) setHash(sid + '-' + (st.sec.cards[idx].label || st.sec.cards[idx].id));
 }
+// sec.cases = [{case, count, cards, note}] -> the audit's case coverage, drawn under the Table 4 block.
+// The cases with count 0 are a result of the audit ("none found"), so their rows are printed, not hidden.
+function caseTable(sec){
+  const rows = (sec.cases || []).filter(r => r && r.case);
+  if (!rows.length) return null;
+  const num = r => Number(r.count), all = rows.every(r => isFinite(num(r)));
+  const tot = all ? rows.reduce((a, r) => a + num(r), 0) : null;
+  let h = `<div class="ct">Case coverage of the audit</div><div class="csub">One row per verdict case of Figure 2: ` +
+    `how many stems the human audit put in it` + (tot !== null ? ` out of the ${tot} judged` : '') +
+    `, and the examples on this page that demonstrate it.</div>`;
+  h += '<table class="ctab"><thead><tr><th>Verdict case</th><th class="n">Stems</th>' +
+    '<th>Examples on this page</th></tr></thead><tbody>';
+  rows.forEach(r => {
+    // A count of 0 is a finding of the audit ("none found"); a missing count is only an unknown.
+    const n = num(r), has = isFinite(n), zero = has && n <= 0, ids = (r.cards || []).map(String).filter(Boolean);
+    h += `<tr${zero ? ' class="z"' : ''}><td><span class="cs">${esc(r.case)}</span>` +
+      (r.note ? `<span class="cn">${esc(r.note)}</span>` : '') + '</td>' +
+      `<td class="n">${has ? esc(n) : '&ndash;'}</td><td>` +
+      (ids.length ? ids.map(x => `<a class="xl" href="#${esc(sec.id)}-${encodeURIComponent(x)}" data-ex="${esc(x)}">${esc(x)}</a>`).join('')
+                  : `<span class="nf">${zero ? 'none found in the audit' : 'no example on this page'}</span>`) +
+      '</td></tr>';
+  });
+  const wrap = document.createElement('div');
+  wrap.className = 'ccov';
+  wrap.innerHTML = h + '</tbody></table>';
+  wrap.querySelectorAll('a.xl').forEach(a => a.onclick = ev => {
+    if (gotoExample(sec.id, a.dataset.ex)) ev.preventDefault();   // no link if the switcher is not up yet
+  });
+  return wrap;
+}
 function buildSwitcher(sec){
   const wrap = document.createElement('div');
   wrap.className = 'sws'; wrap.setAttribute('role', 'tablist'); wrap.setAttribute('aria-label', 'examples');
@@ -654,8 +757,10 @@ function buildSwitcher(sec){
     b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
     b.setAttribute('aria-controls', 'ex-' + sec.id);
     b.tabIndex = i === 0 ? 0 : -1;
-    b.title = (c.float ? c.float + ' \u00b7 ' : '') + (c.title || '');
-    b.innerHTML = `<span class="cid">${esc(c.label || c.id)}</span>` + (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '');
+    b.title = (c.float ? c.float + ' \u00b7 ' : '') + (c.case ? c.case + ' \u00b7 ' : '') + (c.title || '');
+    b.innerHTML = `<span class="cid">${esc(c.label || c.id)}</span>` +
+      (c.case ? `<span class="ccase">${esc(c.case)}</span>` : '') +
+      (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '');
     b.onclick = () => selectExample(sec.id, i, {focus: true});
     chips.push(b); wrap.appendChild(b);
   });
@@ -689,7 +794,15 @@ function buildSection(sec){
     const fk = sec.figure || FIG_AT[sec.id];
     if (fk && FIGS[fk]) blocks = [{label: sec.float, title: sec.float_title, kind: 'figure', figure: fk, caption: sec.figure_caption}];
   }
-  blocks.forEach(b => { const el = floatBlock(b); if (el) s.appendChild(el); });
+  const cases = caseTable(sec);                    // null unless the section carries sec.cases
+  let placed = false;
+  blocks.forEach(b => {
+    const el = floatBlock(b);
+    if (el) s.appendChild(el);
+    // The coverage table is the reading of Table 4, so it sits right under that block.
+    if (el && cases && !placed && (b.key === 't4' || /table\s*4/i.test(b.label || ''))){ s.appendChild(cases); placed = true; }
+  });
+  if (cases && !placed) s.appendChild(cases);      // no Table 4 block on the page: keep the result visible
   if ((sec.cards || []).length){
     const sw = buildSwitcher(sec);
     s.appendChild(sw.wrap);
@@ -700,16 +813,27 @@ function buildSection(sec){
   }
   return s;
 }
+function findExample(sid, label){
+  // Index of the example whose paper identifier (T4.3) or card id (t4_3) matches, else -1.
+  const st = SEC[sid], lab = String(label == null ? '' : label).toLowerCase();
+  if (!st || !lab) return -1;
+  const cards = st.sec.cards || [];
+  let idx = -1;
+  cards.forEach((c, i) => { if (idx < 0 && (String(c.label || '').toLowerCase() === lab || String(c.id || '').toLowerCase() === lab)) idx = i; });
+  return idx;
+}
+function gotoExample(sid, label){
+  const idx = findExample(sid, label);
+  if (idx < 0) return false;
+  selectExample(sid, idx, {focus: true});
+  return true;
+}
 function applyHash(scroll){
   // '#<section>-<identifier>', e.g. '#mem-T4.3'; a plain '#<section>' is left to the browser anchor.
   const h = decodeURIComponent(String(location.hash || '').replace(/^#/, ''));
   const m = /^([A-Za-z0-9]+)-(.+)$/.exec(h);
   if (!m) return false;
-  const st = SEC[m[1]], lab = m[2].toLowerCase();
-  if (!st) return false;
-  const cards = st.sec.cards || [];
-  let idx = -1;
-  cards.forEach((c, i) => { if (idx < 0 && (String(c.label || '').toLowerCase() === lab || String(c.id || '').toLowerCase() === lab)) idx = i; });
+  const idx = findExample(m[1], m[2]);
   if (idx < 0) return false;
   selectExample(m[1], idx, {hash: false});
   if (scroll){ const el = document.getElementById(m[1]); if (el) el.scrollIntoView(); }
