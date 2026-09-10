@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 8 760 606" font-family="DejaVu Sans, Helvetica, Arial, sans-serif">
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#5A6B7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <style>
+    .q rect{fill:#F1F4F6;stroke:#9AA7B2;stroke-width:.8}
+    .q .t1{font-size:14px;font-weight:650;fill:#1A2430}
+    .q .t2{font-size:11px;fill:#5A6B7A}
+    .n rect{fill:#FFFFFF;stroke:#C9D2DA;stroke-width:.8}
+    .n .t1{font-size:13.5px;font-weight:600;fill:#5A6B7A}
+    .n .t2{font-size:11px;fill:#5A6B7A}
+    .bad rect{fill:#FFFFFF;stroke:#D55E00;stroke-width:1.2}
+    .bad .t1{font-size:14px;font-weight:700;fill:#D55E00}
+    .bad .t2{font-size:11px;fill:#5A6B7A}
+    .e{fill:none;stroke:#5A6B7A;stroke-width:1.2}
+    .l{font-size:11.5px;fill:#5A6B7A}
+    .b rect{fill:#FFF8F3;stroke:#D55E00;stroke-width:.8}
+    .b text{font-size:11px;font-weight:700;fill:#D55E00}
+    .b.g rect{fill:#FFFFFF;stroke:#C9D2DA} .b.g text{fill:#5A6B7A;font-weight:600}
+    .b.bl rect{fill:#EFF6FC;stroke:#0072B2} .b.bl text{fill:#0072B2}
+    .mem rect{fill:#FBE9DC}
+    .memb rect{fill:#E3EEF8;stroke:#0072B2;stroke-width:1.2}
+    .memb .t1{fill:#0072B2;font-weight:700}
+  </style></defs>
+  <g class="q"><rect x="236" y="26" width="280" height="56" rx="8"/>
+    <text class="t1" x="376" y="44" text-anchor="middle" dominant-baseline="central">0 &#183; Dataset stem duplicate?</text>
+    <text class="t2" x="376" y="62" text-anchor="middle" dominant-baseline="central">The same stem registered more than once</text></g>
+  <g class="b g"><rect x="400" y="17" width="126" height="18" rx="9"/><text x="463" y="26" text-anchor="middle" dominant-baseline="central">25 &#183; 100% &#183; 5.0%</text></g>
+  <line x1="236" y1="54" x2="182" y2="54" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="208" y="44" text-anchor="middle" dominant-baseline="central">yes</text>
+  <g class="n memb"><rect x="8" y="26" width="168" height="56" rx="8"/>
+    <text class="t1" x="92" y="44" text-anchor="middle" dominant-baseline="central">A &#183; Duplicate</text>
+    <text class="t2" x="92" y="62" text-anchor="middle" dominant-baseline="central">Excluded</text></g>
+  <g class="b bl"><rect x="76" y="17" width="110" height="18" rx="9"/><text x="131" y="26" text-anchor="middle" dominant-baseline="central">10 &#183; 40% &#183; 2.0%</text></g>
+  <line x1="376" y1="82" x2="376" y2="126" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="388" y="100" text-anchor="start" dominant-baseline="central">no</text>
+  <g class="q"><rect x="236" y="126" width="280" height="56" rx="8"/>
+    <text class="t1" x="376" y="144" text-anchor="middle" dominant-baseline="central">1 &#183; Same composition?</text>
+    <text class="t2" x="376" y="162" text-anchor="middle" dominant-baseline="central">Melody or chord progression matches</text></g>
+  <g class="b g"><rect x="408" y="117" width="118" height="18" rx="9"/><text x="467" y="126" text-anchor="middle" dominant-baseline="central">15 &#183; 60% &#183; 3.0%</text></g>
+  <line x1="516" y1="154" x2="570" y2="154" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="543" y="142" text-anchor="middle" dominant-baseline="central">no</text>
+  <g class="n"><rect x="576" y="126" width="168" height="56" rx="8"/>
+    <text class="t1" x="660" y="154" text-anchor="middle" dominant-baseline="central">B &#183; Unrelated</text></g>
+  <g class="b g"><rect x="636" y="117" width="118" height="18" rx="9"/><text x="695" y="126" text-anchor="middle" dominant-baseline="central">13 &#183; 52% &#183; 2.6%</text></g>
+  <line x1="376" y1="182" x2="376" y2="226" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="388" y="200" text-anchor="start" dominant-baseline="central">yes</text>
+  <g class="q"><rect x="236" y="226" width="280" height="56" rx="8"/>
+    <text class="t1" x="376" y="244" text-anchor="middle" dominant-baseline="central">2 &#183; Commonplace pattern?</text>
+    <text class="t2" x="376" y="262" text-anchor="middle" dominant-baseline="central">One&#8211;two notes, a stock chord progression</text></g>
+  <g class="b g"><rect x="416" y="217" width="110" height="18" rx="9"/><text x="471" y="226" text-anchor="middle" dominant-baseline="central">2 &#183; 8% &#183; 0.4%</text></g>
+  <line x1="516" y1="254" x2="570" y2="254" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="543" y="242" text-anchor="middle" dominant-baseline="central">yes</text>
+  <g class="n"><rect x="576" y="226" width="168" height="56" rx="8"/>
+    <text class="t1" x="660" y="244" text-anchor="middle" dominant-baseline="central">C &#183; Commonplace</text>
+    <text class="t2" x="660" y="262" text-anchor="middle" dominant-baseline="central">Not memorization</text></g>
+  <g class="b g"><rect x="644" y="217" width="110" height="18" rx="9"/><text x="699" y="226" text-anchor="middle" dominant-baseline="central">1 &#183; 4% &#183; 0.2%</text></g>
+  <line x1="376" y1="282" x2="376" y2="326" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="388" y="300" text-anchor="start" dominant-baseline="central">no</text>
+  <g class="q"><rect x="236" y="326" width="280" height="56" rx="8"/>
+    <text class="t1" x="376" y="344" text-anchor="middle" dominant-baseline="central">3 &#183; Same timbre?</text>
+    <text class="t2" x="376" y="362" text-anchor="middle" dominant-baseline="central">Reproduced at the recording level</text></g>
+  <g class="b g"><rect x="424" y="317" width="102" height="18" rx="9"/><text x="475" y="326" text-anchor="middle" dominant-baseline="central">1 &#183; 4% &#183; 0.2%</text></g>
+  <line x1="236" y1="354" x2="182" y2="354" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="208" y="344" text-anchor="middle" dominant-baseline="central">yes</text>
+  <g class="bad mem"><rect x="8" y="326" width="168" height="56" rx="8"/>
+    <text class="t1" x="92" y="344" text-anchor="middle" dominant-baseline="central">Type I &#183; Recording</text>
+    <text class="t2" x="92" y="362" text-anchor="middle" dominant-baseline="central">The recording reproduced</text></g>
+  <g class="b"><rect x="84" y="317" width="102" height="18" rx="9"/><text x="135" y="326" text-anchor="middle" dominant-baseline="central">1 &#183; 4% &#183; 0.2%</text></g>
+  <line x1="376" y1="382" x2="376" y2="426" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="388" y="400" text-anchor="start" dominant-baseline="central">no &#8594; composition memorization</text>
+  <g class="q"><rect x="236" y="426" width="280" height="56" rx="8"/>
+    <text class="t1" x="376" y="444" text-anchor="middle" dominant-baseline="central">4 &#183; Core compositional element?</text>
+    <text class="t2" x="376" y="462" text-anchor="middle" dominant-baseline="central">Judged inside the mix</text></g>
+  <g class="b g"><rect x="432" y="417" width="94" height="18" rx="9"/><text x="479" y="426" text-anchor="middle" dominant-baseline="central">0 &#183; 0% &#183; 0%</text></g>
+  <line x1="316" y1="482" x2="240" y2="540" class="e" marker-end="url(#arr)"/>
+  <line x1="436" y1="482" x2="520" y2="540" class="e" marker-end="url(#arr)"/>
+  <text class="l" x="252" y="502" text-anchor="middle" dominant-baseline="central">yes</text>
+  <text class="l" x="508" y="502" text-anchor="middle" dominant-baseline="central">no</text>
+  <g class="bad mem"><rect x="98" y="544" width="264" height="56" rx="8"/>
+    <text class="t1" x="230" y="562" text-anchor="middle" dominant-baseline="central">Type II &#183; Composition</text>
+    <text class="t2" x="230" y="580" text-anchor="middle" dominant-baseline="central">Core element copied</text></g>
+  <g class="b g"><rect x="278" y="535" width="94" height="18" rx="9"/><text x="325" y="544" text-anchor="middle" dominant-baseline="central">0 &#183; 0% &#183; 0%</text></g>
+  <g class="n memb"><rect x="405" y="544" width="264" height="56" rx="8"/>
+    <text class="t1" x="537" y="562" text-anchor="middle" dominant-baseline="central">D &#183; Incidental</text>
+    <text class="t2" x="537" y="580" text-anchor="middle" dominant-baseline="central">Composition memorized; no infringement</text></g>
+  <g class="b g"><rect x="585" y="535" width="94" height="18" rx="9"/><text x="632" y="544" text-anchor="middle" dominant-baseline="central">0 &#183; 0% &#183; 0%</text></g>
+</svg>
