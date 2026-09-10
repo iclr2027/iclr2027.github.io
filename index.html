@@ -38,18 +38,49 @@ kbd{font:10.5px/1.3 ui-monospace,Menlo,monospace;border:1px solid var(--hair);bo
 #theme{font-size:12px;padding:3px 10px;border:1px solid var(--hair);border-radius:12px;background:transparent;color:var(--muted);cursor:pointer}
 header{margin-bottom:6px}
 header .authors{font-size:14px;color:var(--ink);margin:2px 0}
-section{scroll-margin-top:calc(var(--navh) + 12px);margin:22px 0 0;padding-top:12px;border-top:1px solid var(--hair)}
+section{scroll-margin-top:calc(var(--navh) + 12px);margin:26px 0 0;padding-top:14px;border-top:1px solid var(--hair)}
 section:first-of-type{border-top:0;padding-top:0}
 .shead{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
 .shead h2{margin:0}
 .fchip{flex:0 0 auto;font-size:12px;font-weight:700;line-height:20px;letter-spacing:.04em;text-transform:uppercase;
-  color:#fff;background:var(--acc);border-radius:8px;padding:0 9px}
+  color:#fff;background:var(--acc);border-radius:8px;padding:0 9px;white-space:nowrap}
 .intro{max-width:860px}
 .intro p{margin:4px 0}
-figure.fig{margin:12px 0 4px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:10px 14px}
-figure.fig svg{display:block;width:100%;height:auto;max-height:520px;margin:0 auto;font-family:inherit}
-figure.fig figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4}
-.card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:12px 16px;margin:12px 0}
+/* paper floats: collapsible block, one per float of the paper */
+details.pfloat{background:var(--card);border:1px solid var(--hair);border-radius:12px;margin:10px 0}
+details.pfloat>summary{display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;list-style:none;
+  border-bottom:1px solid transparent;border-radius:12px}
+details.pfloat>summary::-webkit-details-marker{display:none}
+details.pfloat[open]>summary{border-bottom-color:var(--hair);border-radius:12px 12px 0 0}
+details.pfloat>summary:focus-visible{outline:2px solid var(--acc2);outline-offset:-2px}
+.pfloat .cv{flex:0 0 auto;width:0;height:0;border:5px solid transparent;border-left:7px solid var(--muted);border-right:0}
+details.pfloat[open] .cv{transform:rotate(90deg)}
+.fchip.sm{font-size:11px;line-height:18px;padding:0 7px}
+.pfloat .ft{font-size:13.5px;font-weight:650;color:var(--ink);min-width:0}
+.pfloat .pt{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
+.pbody{padding:9px 12px 11px;overflow-x:auto}
+.pbody>svg{display:block;width:100%;height:auto;max-height:520px;margin:0 auto;font-family:inherit}
+.pcap{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+/* fallback look for a paper table; template/ptab.css (injected below) may override it */
+.pbody table:not(.ptab){border-collapse:collapse;font-size:12.5px;margin:0 auto;color:var(--ink)}
+.pbody table:not(.ptab) th,.pbody table:not(.ptab) td{padding:3px 8px;text-align:right;white-space:nowrap}
+.pbody table:not(.ptab) th{font-weight:650;color:var(--muted)}
+.pbody table:not(.ptab) td:first-child,.pbody table:not(.ptab) th:first-child{text-align:left}
+/* example switcher: one card body per section, chips carry the paper identifiers */
+.sws{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:14px 0 0}
+.sws .swg{flex:0 0 100%;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+  margin-top:5px;padding-top:6px;border-top:1px solid var(--hair)}
+.sws .swg.first{margin-top:0;padding-top:0;border-top:0}
+.chip{display:inline-flex;align-items:baseline;gap:6px;font-family:inherit;font-size:12px;line-height:22px;padding:0 9px;
+  border:1px solid var(--hair);border-radius:11px;background:var(--card);color:var(--muted);cursor:pointer}
+.chip .cid{font:700 11.5px/22px ui-monospace,Menlo,monospace;letter-spacing:.02em;color:var(--ink)}
+.chip .chint{font-size:11.5px;line-height:22px}
+.chip:hover{border-color:var(--acc)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chip.on .cid{color:#fff}
+.chip:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+.exhost{min-height:64px}
+.card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:12px 16px;margin:8px 0 0}
 .card:focus-within{border-color:var(--acc)}
 .head{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:2px}
 .head .i{font-weight:700;font-size:15.5px}
@@ -85,57 +116,98 @@ figure.fig figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;line-he
 .sys.regen{color:var(--good);border-color:var(--good)}
 .sys.ref{color:var(--muted);border-color:var(--hair);background:var(--soft)}
 canvas.wave{flex:1 1 0;width:0;min-width:0;height:32px;cursor:pointer;display:block}
-/* any-stem card: figure-shaped player */
-.genfig{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);gap:0;margin-top:8px;align-items:stretch}
+/* figure-shaped player (Figure 1 and Table 5 cards): narrow conditioning column, wide generated column */
+.genfig{display:grid;grid-template-columns:minmax(0,30fr) 34px minmax(0,70fr);gap:0;margin-top:8px;align-items:stretch}
 .gpanel{display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--hair);border-radius:12px;padding:8px 10px;min-width:0}
 .ptitle{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;height:22px;line-height:22px;text-align:center}
 .pspace{flex:1 1 auto;min-height:26px;position:relative}
 .gpanel.right .pspace::before{content:'';position:absolute;left:50%;top:4px;bottom:9px;border-left:2px solid var(--muted)}
 .gpanel.right .pspace::after{content:'';position:absolute;left:50%;bottom:4px;margin-left:-4px;border:4px solid transparent;border-top:6px solid var(--muted);border-bottom:0}
 .row.g{height:46px;gap:6px;border-radius:9px;padding:0 6px;background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--sc);margin:3px 0}
-.row.g .rlab{min-width:0;max-width:none;flex:0 0 auto;width:78px;font-weight:600;font-size:12px;color:var(--sc)}
-.row.g .rlab .dur{display:block;font-weight:400;font-size:10.5px}
+.row.g .rlab{min-width:0;max-width:none;flex:0 0 auto;width:82px;font-weight:600;font-size:12px;color:var(--sc);white-space:normal}
+.row.g .rlab .dur{display:block;font-weight:400;font-size:10.5px;line-height:1.15}
 .row.g canvas.wave{height:30px}
+.gpanel.left .row.g{height:auto;min-height:46px;padding:3px 6px}
+.gpanel.left .row.g .rlab{width:74px;font-size:11.5px}
 .sw{display:inline-flex;border:1px solid var(--hair);border-radius:7px;overflow:hidden;flex:0 0 auto}
 .sw button{font-size:10.5px;line-height:20px;padding:0 6px;border:0;background:transparent;color:var(--muted);cursor:pointer;border-left:1px solid var(--hair)}
 .sw button:first-child{border-left:0}
 .sw button.on{background:var(--sc);color:#fff;font-weight:700}
 .sw button:focus-visible{outline:2px solid var(--acc2);outline-offset:-2px}
-.gmid{display:flex;flex-direction:column;min-width:0;padding:8px 0}
-.gmid .ptitle{visibility:hidden}
-.garr{display:flex;align-items:center;justify-content:center}
-.garr .ar{flex:1 1 0;height:2px;background:var(--muted);position:relative}
-.garr .ar::after{content:'';position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--muted);border-right:0}
-.garr .box{flex:0 0 auto;background:var(--ink);color:var(--bg);font-weight:700;font-size:12.5px;line-height:1.2;text-align:center;
-  padding:12px 8px;border-radius:10px;width:96px}
-.gbot{height:52px;display:flex;align-items:center}
-.gbot .ar{flex:1 1 0;height:2px;background:var(--muted);position:relative}
-.gbot .ar::after{content:'';position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--muted);border-right:0}
+/* bracket between the two columns (the generator box is deliberately not drawn) */
+.gmid{display:flex;align-items:center;justify-content:center;padding:24px 2px}
+.gbr{position:relative;flex:1 1 auto;align-self:stretch;min-height:44px}
+.gbr::before{content:'';position:absolute;left:3px;top:6%;bottom:6%;border-left:2px solid var(--hair)}
+.gbr .h{position:absolute;left:3px;right:10px;top:50%;height:2px;background:var(--muted)}
+.gbr .h::after{content:'';position:absolute;right:-10px;top:-5px;border:6px solid transparent;border-left:10px solid var(--muted);border-right:0}
 .row.g.mix .plus{flex:0 0 auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);font-size:13px;line-height:15px;text-align:center;margin-right:-2px}
-/* generation-quality card: one row per system, solo block and mix block */
-.grid.one{grid-template-columns:minmax(0,1fr)}
-.row.cmp{padding:3px 0}
-.row.cmp .rlab{min-width:148px;max-width:148px}
-.row.cmp .sn{display:block;font-size:12.5px;font-weight:700;color:var(--sc);line-height:1.2}
-.row.cmp .cn{display:block;font-size:11px;color:var(--muted);line-height:1.2}
-.row.cmp canvas.wave{height:34px}
 footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
 #loadMsg{margin:20px 0}
 @media (max-width:760px){
   body{padding-left:10px;padding-right:10px;font-size:14.5px}
   .grid{grid-template-columns:minmax(0,1fr)}
   .rlab{min-width:126px;max-width:126px;font-size:11.5px}
-  .row.cmp .rlab{min-width:118px;max-width:118px}
-  figure.fig{padding:8px}
+  .pbody{padding:8px}
   .genfig{grid-template-columns:minmax(0,1fr)}
-  .gmid{padding:4px 0}
-  .gmid .ptitle,.gmid .pspace,.gbot{display:none}
-  .garr{height:auto !important;flex-direction:column}
-  .garr .ar{width:2px;height:18px;flex:0 0 auto}
-  .garr .ar::after{right:-4px;top:auto;bottom:-1px;border:5px solid transparent;border-top:7px solid var(--muted);border-bottom:0}
+  .gmid{display:none}
   .gpanel .pspace{min-height:6px}
   .gpanel.right .pspace::before,.gpanel.right .pspace::after{display:none}
+  .row.g .rlab{width:76px}
 }
+/* Paper floats on the demo page: LaTeX tables rendered as HTML (.ptab) and the
+   six-panel detector figure (.fig3, two SVG variants switched by theme).
+   Tokens mirror template/index.html; memOr/memBl are the paper's memorization colors
+   (RGB 213,94,0 and 0,114,178 in the light theme). ASCII only. */
+:root{--memor:#D55E00;--membl:#0072B2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--memor:#FF8B42;--membl:#57A8E8}}
+:root[data-theme="dark"]{--memor:#FF8B42;--membl:#57A8E8}
+:root[data-theme="light"]{--memor:#D55E00;--membl:#0072B2}
+
+/* optional scroll wrapper for narrow screens: <div class="ptw"><table class="ptab">... */
+.ptw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.ptab{border-collapse:collapse;width:100%;margin:6px 0 2px;
+  font:12.5px/1.35 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+table.ptab caption{caption-side:top;text-align:left;font-size:12.5px;font-weight:700;color:var(--muted);
+  letter-spacing:.02em;padding:0 0 5px}
+table.ptab th,table.ptab td{padding:3px 7px;text-align:left;vertical-align:baseline;white-space:nowrap}
+table.ptab td.c,table.ptab th.c{text-align:center}
+table.ptab td.r,table.ptab th.r{text-align:right}
+table.ptab thead th{font-weight:650;color:var(--ink)}
+table.ptab thead tr:first-child th{border-top:1.4px solid var(--ink)}
+table.ptab thead tr:last-child th{border-bottom:1px solid var(--ink)}
+table.ptab th.cmid{border-bottom:1px solid var(--hair);padding-bottom:2px}
+table.ptab tbody tr.sep>*{border-top:1px solid var(--ink)}
+table.ptab tbody tr.sepl>*{border-top:1px solid var(--hair)}
+table.ptab tbody tr:last-child>*{border-bottom:1.4px solid var(--ink)}
+table.ptab tbody th{font-weight:400}
+table.ptab tbody th[rowspan]{font-weight:650;vertical-align:middle}
+table.ptab th.grp{font-weight:400;color:var(--muted);padding-top:6px;white-space:normal}
+table.ptab th.grp em{font-style:italic;color:var(--ink)}
+table.ptab tbody tr.ind th:first-child{padding-left:20px;white-space:normal}
+table.ptab .sc{font-size:10.5px;color:var(--muted);margin-left:1px}
+table.ptab .mo{color:var(--memor)}
+table.ptab .mb{color:var(--membl)}
+table.ptab b{font-weight:700}
+table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:11px;color:var(--muted);white-space:normal}
+@media (max-width:640px){table.ptab{font-size:11.5px}table.ptab th,table.ptab td{padding:2.5px 5px}
+  table.ptab tbody tr.ind th:first-child{padding-left:12px}}
+
+/* six-panel detector figure: light and dark SVG, only one is displayed */
+.fig3{margin:0}
+.fig3 svg{display:block;width:100%;height:auto}
+.fig3 .f3l{display:block}
+.fig3 .f3d{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .fig3 .f3l{display:none}
+  :root:not([data-theme="light"]) .fig3 .f3d{display:block}}
+:root[data-theme="dark"] .fig3 .f3l{display:none}
+:root[data-theme="dark"] .fig3 .f3d{display:block}
+:root[data-theme="light"] .fig3 .f3l{display:block}
+:root[data-theme="light"] .fig3 .f3d{display:none}
+/* the float summary already prints "Table 4 - Human verdicts...", so the table's own
+   <caption> is kept for assistive technology (accessible table name) but not painted. */
+.pbody table.ptab>caption{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
@@ -146,7 +218,7 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-si
 <p class="authors" id="authors"></p>
 <p class="muted sub" id="subtitle"></p>
 <div class="intro" id="overview" style="margin-top:8px"></div>
-<p class="muted" id="keysNote" style="font-size:12px;margin-top:4px"><kbd>Space</kbd> stop &nbsp; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> seek 1 s &nbsp;&middot;&nbsp; click a waveform to play from there. Headphones recommended.</p>
+<p class="muted" id="keysNote" style="font-size:12px;margin-top:4px"><kbd>Space</kbd> stop &nbsp; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> seek 1 s, or switch example while an example chip has focus &nbsp;&middot;&nbsp; click a waveform to play from there. Headphones recommended.</p>
 </header>
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
@@ -157,21 +229,20 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-si
 'use strict';
 // -- state and constants --
 let D = null, actx = null, current = null;
-const bufs = new Map();
-const WAVES = [];
+const bufs = new Map();          // audio url -> decoded buffer; kept across example switches
+const WAVES = [];                // [canvas, peaks] of every wired row (detached ones are skipped)
+let WCOL = null;                 // while a card body is being built: collect its waves
 const PLAY = '\u25B6', PAUSE = '\u275A\u275A';
 const SYS = {ctx: 'Context', prompt: 'Prompt', ours: 'Ours', ace: 'ACE-Step', real: 'Real', mix: 'Mix', hit: 'Training match', regen: 'Regenerated', ref: 'Reference'};
 const SWL = {ours: 'Ours', ace: 'ACE-Step', real: 'Real'};
-// Per-system accent used by the system-comparison layout (T5).
-const SYSC = {ctx: 'var(--ctxc)', prompt: 'var(--acc)', ours: 'var(--good)', ace: 'var(--vio)', real: 'var(--ink)',
-              mix: 'var(--teal)', hit: 'var(--bad)', regen: 'var(--good)', ref: 'var(--muted)'};
-const SYSORD = ['ctx', 'prompt', 'ours', 'ace', 'real', 'mix', 'hit', 'regen', 'ref'];
-// Section id -> inline figure. Paper floats: Figure 1 in section f1, Figure 2 (verdict tree) in section f2.
-// data.json carries the same mapping in sec.figure; these are the fallbacks.
-const FIG_AT = {f1: 'fig1', f2: 'tree'};
-// Section id -> card layout. figure = figure-shaped any-stem player, compare = one row per system.
-const LAYOUT_AT = {f1: 'figure', t5: 'compare'};
+// Section id -> inline figure, used only if data.json carries no float blocks for the section.
+// Paper Figure 1 lives in the generation section, paper Figure 2 (verdict tree) in the memorization section.
+const FIG_AT = {gen: 'fig1', mem: 'tree'};
+// Section id -> card layout: figure = the figure-shaped player, list = the compact row list.
+const LAYOUT_AT = {gen: 'figure'};
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const slug = s => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+const titleize = s => String(s == null ? '' : s).split('_').filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
 // -- theme --
 const THEME_KEY = 'demo_theme';
@@ -268,6 +339,7 @@ function wireRow(div, sel){
   };
   const w = [cv, sel()[1]];
   WAVES.push(w);
+  if (WCOL) WCOL.push(w);
   requestAnimationFrame(() => drawWave(cv, w[1]));
   return w;
 }
@@ -283,15 +355,16 @@ function audioRow(row){
   return div;
 }
 // A figure-style row: colored, optional system switch selecting among {ours, ace, real} clips.
-function genRow(label, color, opts, extraClass){
+function genRow(label, color, opts, extraClass, cap){
   const div = document.createElement('div');
   div.className = 'row g' + (extraClass ? ' ' + extraClass : ''); div.style.setProperty('--sc', color);
   const keys = Object.keys(opts);
   let curKey = keys[0];
   const clip = () => opts[curKey].clip;
+  const dur = () => (cap ? esc(cap) + ' &middot; ' : '') + esc(clip()[2]) + ' s';
   div.innerHTML = (extraClass === 'mix' ? '<span class="plus">+</span>' : '') +
     `<button class="play" type="button" title="play / stop" aria-label="play ${esc(label)}">${PLAY}</button>` +
-    `<div class="rlab">${esc(label)}<span class="dur">${esc(clip()[2])} s</span></div>` +
+    `<div class="rlab">${esc(label)}<span class="dur">${dur()}</span></div>` +
     `<canvas class="wave" title="play from here"></canvas>` +
     (keys.length > 1 ? '<div class="sw" role="group" aria-label="system">' +
       keys.map(k => `<button type="button" data-k="${esc(k)}" class="${k === curKey ? 'on' : ''}">${esc(SWL[k] || k)}</button>`).join('') + '</div>' : '');
@@ -301,13 +374,12 @@ function genRow(label, color, opts, extraClass){
     if (current && current.args[1] === div) stopAll();
     curKey = b.dataset.k;
     div.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x === b));
-    div.querySelector('.dur').textContent = clip()[2] + ' s';
+    div.querySelector('.dur').innerHTML = dur();
     w[1] = clip()[1]; drawWave(w[0], w[1]);
   });
   return div;
 }
 const stemColor = i => `var(--s${i % 6})`;
-
 // -- inline figures (theme-aware via CSS variables) --
 function wavePath(x, y, n, amp){
   let d = `M${x} ${y}`;
@@ -420,7 +492,26 @@ function figTree(){
 }
 const FIGS = {fig1: () => (D.figures && D.figures.fig1_svg) || figConcept(), tree: figTree};
 
-// -- page --
+// -- paper float blocks (collapsible; the reader can look at the float while listening) --
+function floatBlock(blk){
+  const d = document.createElement('details');
+  d.className = 'pfloat';
+  d.open = blk.open !== false;
+  const kind = blk.kind === 'table' ? 'table' : 'figure';
+  d.innerHTML = `<summary><span class="cv"></span><span class="fchip sm">${esc(blk.label || '')}</span>` +
+    `<span class="ft">${esc(blk.title || '')}</span><span class="pt">paper ${kind}</span></summary>`;
+  const body = document.createElement('div');
+  body.className = 'pbody ' + (kind === 'table' ? 'ptabs' : 'pfig');
+  const figKey = blk.figure || '';
+  if (figKey && FIGS[figKey]) body.innerHTML = FIGS[figKey]();
+  else if (blk.html) body.innerHTML = kind === 'table' ? '<div class="ptw">' + blk.html + '</div>' : blk.html;
+  else return null;
+  if (blk.caption) body.insertAdjacentHTML('beforeend', `<div class="pcap">${blk.caption}</div>`);
+  d.appendChild(body);
+  return d;
+}
+
+// -- cards --
 function cardHead(c){
   // The chip is the paper-float identifier of the card (T2.3); it falls back to the raw card id.
   let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span><span class="i">${esc(c.title)}</span>`;
@@ -447,46 +538,8 @@ function buildCard(c){
   });
   return card;
 }
-// One system per row: the system name carries the row, the clip label is the caption under it.
-function cmpRow(row){
-  const dur = row.clip[2];
-  const sys = /^[a-z]+$/.test(row.sys || '') ? row.sys : 'ref';
-  // A mix row (key mix_ours / mix_ace / mix_real) is named and coloured by the system it carries,
-  // so the mix block reads in the same order and colours as the solo block above it.
-  const m = /^mix_([a-z]+)$/.exec(String(row.key || ''));
-  const acc = sys === 'mix' && m && SWL[m[1]] ? m[1] : sys;
-  const title = SWL[acc] || SYS[acc] || SYS[sys] || sys;
-  const sub = String(row.label || '') === title ? '' : String(row.label || '');
-  const div = document.createElement('div');
-  div.className = 'row cmp'; div.dataset.sys = sys;
-  div.style.setProperty('--sc', SYSC[acc] || SYSC[sys] || 'var(--acc)');
-  div.innerHTML = `<button class="play" type="button" title="play / stop" aria-label="play ${esc(title)} ${esc(sub)}">${PLAY}</button>` +
-    `<div class="rlab"><span class="sn">${esc(title)}</span>` +
-    `<span class="cn">${esc(sub)}${sub ? ' &middot; ' : ''}${esc(dur)} s</span></div>` +
-    `<canvas class="wave" title="play from here"></canvas>`;
-  wireRow(div, () => row.clip);
-  return div;
-}
-// Generation-quality card: every group (solo stem, full mix) becomes a block with one row per system.
-function buildCmpCard(c){
-  const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
-  card.innerHTML = cardHead(c);
-  let n = 0;
-  (c.groups || []).forEach(g => {
-    const rows = (g.rows || []).filter(r => Array.isArray(r.clip) && r.clip.length >= 3);
-    if (!rows.length) return;
-    const ord = s => { const i = SYSORD.indexOf(s); return i < 0 ? SYSORD.length : i; };
-    rows.map((r, i) => [r, i]).sort((a, b) => (ord(a[0].sys) - ord(b[0].sys)) || (a[1] - b[1]))
-        .forEach((p, i) => { rows[i] = p[0]; });
-    const gd = document.createElement('div'); gd.className = 'group cmp';
-    if (g.label){ const gl = document.createElement('div'); gl.className = 'glab'; gl.textContent = g.label; gd.appendChild(gl); }
-    const grid = document.createElement('div'); grid.className = 'grid one';
-    rows.forEach(r => grid.appendChild(cmpRow(r)));
-    gd.appendChild(grid); card.appendChild(gd); n++;
-  });
-  return n ? card : buildCard(c);
-}
-// Any-stem card laid out like the concept figure: prompts + context | generator | generated stems + one mix.
+// Figure-shaped player, used by both the any-stem cards (prompt per stem) and the quality cards
+// (one stem, ours / ACE-Step / real): conditioning on the left, generated stems and the mix on the right.
 function buildGenCard(c){
   const rows = {};
   const stems = [];
@@ -494,55 +547,154 @@ function buildGenCard(c){
     if (!Array.isArray(r.clip) || r.clip.length < 3) return;
     const k = r.key || '';
     rows[k] = r;
-    if (k.startsWith('p_')) stems.push({g: k.slice(2), label: g.label || k.slice(2)});
+    if (k.indexOf('p_') === 0){
+      const st = k.slice(2);
+      stems.push({g: st, label: slug(g.label) === st ? g.label : titleize(st)});
+    }
   }));
   const ctx = rows.ctx;
   if (!ctx || !stems.length) return buildCard(c);
+  const one = stems.length === 1;
+  // ours / ACE-Step / real of one stem: keyed <sys>_<stem>, or plain <sys> when the card has a single stem.
+  const pick = g => { const o = {}; ['ours', 'ace', 'real'].forEach(s => {
+    const r = rows[s + '_' + g] || (one ? rows[s] : null); if (r) o[s] = r; }); return o; };
   const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
   card.innerHTML = cardHead(c);
   const fig = document.createElement('div'); fig.className = 'genfig';
   const left = document.createElement('div'); left.className = 'gpanel left';
   left.innerHTML = '<div class="ptitle">Registered audio</div>';
   const mid = document.createElement('div'); mid.className = 'gmid';
+  mid.innerHTML = '<div class="gbr"><span class="h"></span></div>';
   const right = document.createElement('div'); right.className = 'gpanel right';
-  right.innerHTML = '<div class="ptitle">Generated stems</div>';
-  const pick = (base, g) => { const o = {}; ['ours', 'ace', 'real'].forEach(s => { const r = rows[`${base}${s}_${g}`]; if (r) o[s] = r; }); return o; };
+  right.innerHTML = `<div class="ptitle">Generated stem${one ? '' : 's'}</div>`;
   stems.forEach((st, i) => {
-    left.appendChild(genRow(`${st.label} prompt`, stemColor(i), {prompt: rows[`p_${st.g}`]}));
-    const o = pick('', st.g);
+    left.appendChild(genRow(st.label, stemColor(i), {prompt: rows['p_' + st.g]}, '', 'prompt'));
+    const o = pick(st.g);
     if (Object.keys(o).length) right.appendChild(genRow(st.label, stemColor(i), o));
   });
   left.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
-  left.appendChild(genRow('Context', 'var(--ctxc)', {ctx: ctx}));
+  left.appendChild(genRow('Context', 'var(--ctxc)', {ctx: ctx}, '', 'given'));
   right.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
   const mo = {}; ['ours', 'ace', 'real'].forEach(s => { if (rows['mix_' + s]) mo[s] = rows['mix_' + s]; });
-  if (Object.keys(mo).length) right.appendChild(genRow('One mix', 'var(--teal)', mo, 'mix'));
-  const n = stems.length;
-  mid.innerHTML = `<div class="ptitle">.</div><div class="garr" style="height:${n * 52}px"><span class="ar"></span>` +
-    `<span class="box">Any-stem<br>generator</span><span class="ar"></span></div><div class="pspace"></div><div class="gbot"><span class="ar"></span></div>`;
+  if (Object.keys(mo).length) right.appendChild(genRow(one ? 'Full mix' : 'One mix', 'var(--teal)', mo, 'mix'));
   fig.appendChild(left); fig.appendChild(mid); fig.appendChild(right);
   card.appendChild(fig);
   return card;
 }
-function buildFigure(key, caption){
-  const f = document.createElement('figure'); f.className = 'fig';
-  f.innerHTML = FIGS[key]() + (caption ? `<figcaption>${caption}</figcaption>` : '');
-  return f;
+function buildBody(sec, card){
+  const layout = sec.layout || LAYOUT_AT[sec.id] || 'list';
+  WCOL = [];
+  const node = layout === 'figure' ? buildGenCard(card) : buildCard(card);
+  node.waves = WCOL;
+  WCOL = null;
+  return node;
 }
+
+// -- example switcher: one card body per section, chips carry the paper identifiers --
+const SEC = {};   // section id -> {sec, host, chips, idx, nodes}
+function swapIn(host, node){
+  while (host.firstChild) host.removeChild(host.firstChild);
+  host.appendChild(node);
+}
+function setHash(h){
+  // Linkable and reload-safe; replaceState does not scroll and does not grow the history.
+  try { history.replaceState(null, '', '#' + h); } catch (e) {}
+}
+function selectExample(sid, idx, opts){
+  const st = SEC[sid];
+  opts = opts || {};
+  if (!st || !st.sec.cards || !st.sec.cards[idx]) return;
+  if (st.idx !== idx){
+    stopAll();                                   // never leave an example playing behind the reader
+    st.chips.forEach((b, i) => { const on = i === idx;
+      b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; });
+    let node = st.nodes.get(idx);
+    if (!node){ node = buildBody(st.sec, st.sec.cards[idx]); st.nodes.set(idx, node); }
+    swapIn(st.host, node);
+    st.idx = idx;
+    requestAnimationFrame(() => (node.waves || []).forEach(w => drawWave(w[0], w[1])));
+  }
+  if (opts.focus && st.chips[idx]) st.chips[idx].focus({preventScroll: true});
+  if (opts.hash !== false) setHash(sid + '-' + (st.sec.cards[idx].label || st.sec.cards[idx].id));
+}
+function buildSwitcher(sec){
+  const wrap = document.createElement('div');
+  wrap.className = 'sws'; wrap.setAttribute('role', 'tablist'); wrap.setAttribute('aria-label', 'examples');
+  const cards = sec.cards || [], chips = [], grouped = (sec.floats || []).length > 1;
+  let prev = null, first = true;
+  cards.forEach((c, i) => {
+    if (grouped && c.float && c.float !== prev){
+      const g = document.createElement('span');
+      g.className = 'swg' + (first ? ' first' : '');
+      g.textContent = c.float + (c.float_title ? ' \u00b7 ' + c.float_title : '');
+      wrap.appendChild(g); first = false;
+    }
+    prev = c.float;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip' + (i === 0 ? ' on' : '');
+    b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    b.setAttribute('aria-controls', 'ex-' + sec.id);
+    b.tabIndex = i === 0 ? 0 : -1;
+    b.title = (c.float ? c.float + ' \u00b7 ' : '') + (c.title || '');
+    b.innerHTML = `<span class="cid">${esc(c.label || c.id)}</span>` + (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '');
+    b.onclick = () => selectExample(sec.id, i, {focus: true});
+    chips.push(b); wrap.appendChild(b);
+  });
+  wrap.addEventListener('keydown', ev => {
+    const k = ev.key;
+    if (k !== 'ArrowLeft' && k !== 'ArrowRight' && k !== 'Home' && k !== 'End') return;
+    const st = SEC[sec.id];
+    if (!st || !st.chips.length) return;
+    ev.preventDefault(); ev.stopPropagation();        // arrows move between examples, not the playhead
+    const n = st.chips.length;
+    let i = st.idx < 0 ? 0 : st.idx;
+    if (k === 'Home') i = 0;
+    else if (k === 'End') i = n - 1;
+    else i = (i + (k === 'ArrowLeft' ? -1 : 1) + n) % n;
+    selectExample(sec.id, i, {focus: true});
+  });
+  return {wrap: wrap, chips: chips};
+}
+
+// -- page --
 function buildSection(sec){
   const s = document.createElement('section'); s.id = sec.id;
-  // Heading = paper-float chip ("Figure 1") + the caption title of that float.
+  // Heading = the paper-float identifiers of the section ("Figure 1 + Table 5") and its title.
   const hd = document.createElement('div'); hd.className = 'shead';
   if (sec.float){ const ch = document.createElement('span'); ch.className = 'fchip'; ch.textContent = sec.float; hd.appendChild(ch); }
-  const h = document.createElement('h2'); h.textContent = sec.float_title || sec.title || ''; hd.appendChild(h);
+  const h = document.createElement('h2'); h.textContent = sec.title || sec.float_title || ''; hd.appendChild(h);
   s.appendChild(hd);
   if (sec.intro_html){ const d = document.createElement('div'); d.className = 'intro'; d.innerHTML = sec.intro_html; s.appendChild(d); }
-  const figKey = sec.figure || FIG_AT[sec.id];
-  if (figKey && FIGS[figKey]) s.appendChild(buildFigure(figKey, sec.figure_caption || ''));
-  const layout = sec.layout || LAYOUT_AT[sec.id] || 'list';
-  const build = layout === 'figure' ? buildGenCard : layout === 'compare' ? buildCmpCard : buildCard;
-  (sec.cards || []).forEach(c => s.appendChild(build(c)));
+  let blocks = sec.floats || [];
+  if (!blocks.length){
+    const fk = sec.figure || FIG_AT[sec.id];
+    if (fk && FIGS[fk]) blocks = [{label: sec.float, title: sec.float_title, kind: 'figure', figure: fk, caption: sec.figure_caption}];
+  }
+  blocks.forEach(b => { const el = floatBlock(b); if (el) s.appendChild(el); });
+  if ((sec.cards || []).length){
+    const sw = buildSwitcher(sec);
+    s.appendChild(sw.wrap);
+    const host = document.createElement('div'); host.className = 'exhost'; host.id = 'ex-' + sec.id;
+    host.setAttribute('role', 'tabpanel'); host.setAttribute('aria-label', 'selected example');
+    s.appendChild(host);
+    SEC[sec.id] = {sec: sec, host: host, chips: sw.chips, idx: -1, nodes: new Map()};
+  }
   return s;
+}
+function applyHash(scroll){
+  // '#<section>-<identifier>', e.g. '#mem-T4.3'; a plain '#<section>' is left to the browser anchor.
+  const h = decodeURIComponent(String(location.hash || '').replace(/^#/, ''));
+  const m = /^([A-Za-z0-9]+)-(.+)$/.exec(h);
+  if (!m) return false;
+  const st = SEC[m[1]], lab = m[2].toLowerCase();
+  if (!st) return false;
+  const cards = st.sec.cards || [];
+  let idx = -1;
+  cards.forEach((c, i) => { if (idx < 0 && (String(c.label || '').toLowerCase() === lab || String(c.id || '').toLowerCase() === lab)) idx = i; });
+  if (idx < 0) return false;
+  selectExample(m[1], idx, {hash: false});
+  if (scroll){ const el = document.getElementById(m[1]); if (el) el.scrollIntoView(); }
+  return true;
 }
 function render(){
   document.title = D.title || 'Audio examples';
@@ -559,13 +711,17 @@ function render(){
   const nav = document.getElementById('navLinks'); nav.innerHTML = '';
   const main = document.getElementById('main'); main.innerHTML = '';
   (D.sections || []).forEach(sec => {
-    // Nav carries the short float identifiers: Fig 1, T1, ... T5, Notes.
+    // Nav carries the short float identifiers: Fig 1 + T5, T1, T2, T3, Fig 2 + T4 + Fig 3, Notes.
     const a = document.createElement('a'); a.className = 'lnk'; a.href = '#' + sec.id;
-    a.textContent = sec.short || sec.float || sec.title; a.title = sec.float ? sec.float + ' ' + (sec.float_title || '') : (sec.title || '');
+    a.textContent = sec.short || sec.float || sec.title;
+    a.title = sec.float ? sec.float + ' \u00b7 ' + (sec.title || '') : (sec.title || '');
     nav.appendChild(a);
     main.appendChild(buildSection(sec));
   });
   document.getElementById('foot').innerHTML = D.footer_html || '';
+  Object.keys(SEC).forEach(sid => selectExample(sid, 0, {hash: false}));   // first example of every section
+  applyHash(true);
+  window.addEventListener('hashchange', () => applyHash(true));
   // highlight the section in view
   if ('IntersectionObserver' in window){
     const links = Array.from(nav.querySelectorAll('a.lnk'));
@@ -577,7 +733,8 @@ function render(){
 }
 fetch('data.json', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
-  .catch(e => { document.getElementById('loadMsg').textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
+  .catch(e => { const el = document.getElementById('loadMsg');
+    if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
 
 // -- keys --
 document.addEventListener('keydown', e => {
