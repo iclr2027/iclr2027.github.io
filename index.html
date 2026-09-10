@@ -9,13 +9,19 @@
 <style>
 :root{--bg:#F7F9FA;--card:#FFFFFF;--ink:#1A2430;--muted:#5A6B7A;--hair:#E1E7EC;
   --acc:#D55E00;--acc2:#0072B2;--good:#0B7A4B;--bad:#c0392b;--soft:#FFF4EC;--vio:#6A4CB0;--teal:#0E7C86;--navh:50px;
-  --s0:#D55E00;--s1:#0E7C86;--s2:#6A4CB0;--s3:#B07A00;--s4:#C2185B;--s5:#2E7D32;--ctxc:#0072B2}
+  /* stem palette = the hues of paper Figure 1 (template/fig1_src.svg): stem 1 orange, 2 green, 3 violet,
+     context blue. --sN is the figure pill stroke (row accent, waveform progress), --sNt the figure pill
+     text (labels, play glyph). s3..s5 continue the same recipe at the farthest remaining hues. */
+  --s0:#E8833A;--s1:#3A9E83;--s2:#8A63C9;--s3:#B3CA40;--s4:#CA406C;--s5:#40CA69;--ctxc:#3F7FC4;
+  --s0t:#B3541E;--s1t:#175C4A;--s2t:#4A2F78;--s3t:#798B22;--s4t:#8B2243;--s5t:#228B41;--ctxt:#1F5FA8}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#171F28;
   --ink:#E8ECF0;--muted:#94A3B0;--hair:#26303B;--acc:#FF8B42;--acc2:#57A8E8;--good:#3FBF87;--bad:#e05545;--soft:#2A1F16;--vio:#A98CE8;--teal:#4CC3CD;
-  --s0:#FF8B42;--s1:#4CC3CD;--s2:#A98CE8;--s3:#E0B040;--s4:#F06292;--s5:#66BB6A;--ctxc:#57A8E8}}
+  --s0:#FF8B42;--s1:#4CC3A0;--s2:#A98CE8;--s3:#CEE65B;--s4:#E65B87;--s5:#5BE685;--ctxc:#57A8E8;
+  --s0t:#FFB27A;--s1t:#7FD8B8;--s2t:#C4B0F0;--s3t:#DEEE8D;--s4t:#EE8DAC;--s5t:#8DEEAA;--ctxt:#8CC0F0}}
 :root[data-theme="dark"]{--bg:#10161D;--card:#171F28;--ink:#E8ECF0;--muted:#94A3B0;--hair:#26303B;
   --acc:#FF8B42;--acc2:#57A8E8;--good:#3FBF87;--bad:#e05545;--soft:#2A1F16;--vio:#A98CE8;--teal:#4CC3CD;
-  --s0:#FF8B42;--s1:#4CC3CD;--s2:#A98CE8;--s3:#E0B040;--s4:#F06292;--s5:#66BB6A;--ctxc:#57A8E8}
+  --s0:#FF8B42;--s1:#4CC3A0;--s2:#A98CE8;--s3:#CEE65B;--s4:#E65B87;--s5:#5BE685;--ctxc:#57A8E8;
+  --s0t:#FFB27A;--s1t:#7FD8B8;--s2t:#C4B0F0;--s3t:#DEEE8D;--s4t:#EE8DAC;--s5t:#8DEEAA;--ctxt:#8CC0F0}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
@@ -67,12 +73,13 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
 .pbody table:not(.ptab) th{font-weight:650;color:var(--muted)}
 .pbody table:not(.ptab) td:first-child,.pbody table:not(.ptab) th:first-child{text-align:left}
 /* example switcher: one card body per section, chips carry the paper identifiers */
-.sws{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:14px 0 0}
+.sws{display:flex;flex-wrap:wrap;gap:7px 6px;align-items:center;margin:14px 0 0}
 .sws .swg{flex:0 0 100%;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
   margin-top:5px;padding-top:6px;border-top:1px solid var(--hair)}
 .sws .swg.first{margin-top:0;padding-top:0;border-top:0}
 .chip{display:inline-flex;align-items:baseline;gap:6px;font-family:inherit;font-size:12px;line-height:22px;padding:0 9px;
-  border:1px solid var(--hair);border-radius:11px;background:var(--card);color:var(--muted);cursor:pointer}
+  border:1px solid var(--hair);border-radius:11px;background:var(--card);color:var(--muted);cursor:pointer;
+  max-width:100%;white-space:nowrap}
 .chip .cid{font:700 11.5px/22px ui-monospace,Menlo,monospace;letter-spacing:.02em;color:var(--ink)}
 .chip .chint{font-size:11.5px;line-height:22px}
 .chip:hover{border-color:var(--acc)}
@@ -91,16 +98,22 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:20px;padding:0 9px;border-radius:11px;
   background:var(--soft);border:1px solid var(--hair);color:var(--ink)}
 .badge .bv{font-weight:700;font-family:ui-monospace,Menlo,monospace;color:var(--acc)}
+/* 4+ badges (e.g. the per-example detector scores) read better as a key/value list than as pills */
+.badges.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px;margin:6px 0 3px;max-width:720px}
+.badges.kv .badge{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:1px 1px 2px;
+  background:transparent;border:0;border-bottom:1px dotted var(--hair);border-radius:0;line-height:18px}
+.badges.kv .badge .bl{color:var(--muted);white-space:normal;min-width:0}
+.badges.kv .badge .bv{flex:0 0 auto}
 .note{font-size:13px;color:var(--muted);margin:4px 0 4px}
 .group{margin-top:8px;padding-top:6px;border-top:1px dashed var(--hair)}
 .group:first-of-type{border-top:0}
 .glab{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:1px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px}
-.row{display:flex;gap:7px;align-items:center;padding:2px 0;min-width:0;--sc:var(--acc)}
+.row{display:flex;gap:7px;align-items:center;padding:2px 0;min-width:0;--sc:var(--acc);--sct:var(--acc)}
 .play{width:28px;height:28px;min-width:28px;border-radius:50%;border:1.5px solid var(--sc);
-  background:transparent;color:var(--sc);font-size:10px;cursor:pointer;padding:0}
+  background:transparent;color:var(--sct);font-size:10px;cursor:pointer;padding:0}
 .play:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
-.row.playing .play{background:var(--sc);color:#fff}
+.row.playing .play{background:var(--sct);border-color:var(--sct);color:var(--card)}
 .row.err .play{border-color:var(--bad);color:var(--bad);opacity:.6}
 .rlab{min-width:160px;max-width:160px;font-size:12px;color:var(--ink);line-height:1.2}
 .rlab .dur{color:var(--muted);white-space:nowrap}
@@ -124,15 +137,16 @@ canvas.wave{flex:1 1 0;width:0;min-width:0;height:32px;cursor:pointer;display:bl
 .gpanel.right .pspace::before{content:'';position:absolute;left:50%;top:4px;bottom:9px;border-left:2px solid var(--muted)}
 .gpanel.right .pspace::after{content:'';position:absolute;left:50%;bottom:4px;margin-left:-4px;border:4px solid transparent;border-top:6px solid var(--muted);border-bottom:0}
 .row.g{height:46px;gap:6px;border-radius:9px;padding:0 6px;background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--sc);margin:3px 0}
-.row.g .rlab{min-width:0;max-width:none;flex:0 0 auto;width:82px;font-weight:600;font-size:12px;color:var(--sc);white-space:normal}
+.row.g .rlab{min-width:0;max-width:none;flex:0 0 auto;width:82px;font-weight:600;font-size:12px;color:var(--sct);white-space:normal}
 .row.g .rlab .dur{display:block;font-weight:400;font-size:10.5px;line-height:1.15}
 .row.g canvas.wave{height:30px}
+.row.g.mix{border-left-color:var(--muted)}
 .gpanel.left .row.g{height:auto;min-height:46px;padding:3px 6px}
 .gpanel.left .row.g .rlab{width:74px;font-size:11.5px}
 .sw{display:inline-flex;border:1px solid var(--hair);border-radius:7px;overflow:hidden;flex:0 0 auto}
 .sw button{font-size:10.5px;line-height:20px;padding:0 6px;border:0;background:transparent;color:var(--muted);cursor:pointer;border-left:1px solid var(--hair)}
 .sw button:first-child{border-left:0}
-.sw button.on{background:var(--sc);color:#fff;font-weight:700}
+.sw button.on{background:var(--sct);color:var(--card);font-weight:700}
 .sw button:focus-visible{outline:2px solid var(--acc2);outline-offset:-2px}
 /* bracket between the two columns (the generator box is deliberately not drawn) */
 .gmid{display:flex;align-items:center;justify-content:center;padding:24px 2px}
@@ -140,7 +154,6 @@ canvas.wave{flex:1 1 0;width:0;min-width:0;height:32px;cursor:pointer;display:bl
 .gbr::before{content:'';position:absolute;left:3px;top:6%;bottom:6%;border-left:2px solid var(--hair)}
 .gbr .h{position:absolute;left:3px;right:10px;top:50%;height:2px;background:var(--muted)}
 .gbr .h::after{content:'';position:absolute;right:-10px;top:-5px;border:6px solid transparent;border-left:10px solid var(--muted);border-right:0}
-.row.g.mix .plus{flex:0 0 auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);font-size:13px;line-height:15px;text-align:center;margin-right:-2px}
 footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
 #loadMsg{margin:20px 0}
 @media (max-width:760px){
@@ -153,6 +166,9 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-si
   .gpanel .pspace{min-height:6px}
   .gpanel.right .pspace::before,.gpanel.right .pspace::after{display:none}
   .row.g .rlab{width:76px}
+  .sws{gap:6px 5px}
+  .chip{padding:0 8px;white-space:normal}
+  .badges.kv{grid-template-columns:minmax(0,1fr);max-width:none}
 }
 /* Paper floats on the demo page: LaTeX tables rendered as HTML (.ptab) and the
    six-panel detector figure (.fig3, two SVG variants switched by theme).
@@ -233,8 +249,8 @@ const bufs = new Map();          // audio url -> decoded buffer; kept across exa
 const WAVES = [];                // [canvas, peaks] of every wired row (detached ones are skipped)
 let WCOL = null;                 // while a card body is being built: collect its waves
 const PLAY = '\u25B6', PAUSE = '\u275A\u275A';
-const SYS = {ctx: 'Context', prompt: 'Prompt', ours: 'Ours', ace: 'ACE-Step', real: 'Real', mix: 'Mix', hit: 'Training match', regen: 'Regenerated', ref: 'Reference'};
-const SWL = {ours: 'Ours', ace: 'ACE-Step', real: 'Real'};
+const SYS = {ctx: 'Context', prompt: 'Prompt', ours: 'Ours', ace: 'ACE', real: 'Real', mix: 'Mix', hit: 'Training match', regen: 'Regenerated', ref: 'Reference'};
+const SWL = {ours: 'Ours', ace: 'ACE', real: 'Real'};
 // Section id -> inline figure, used only if data.json carries no float blocks for the section.
 // Paper Figure 1 lives in the generation section, paper Figure 2 (verdict tree) in the memorization section.
 const FIG_AT = {gen: 'fig1', mem: 'tree'};
@@ -355,15 +371,15 @@ function audioRow(row){
   return div;
 }
 // A figure-style row: colored, optional system switch selecting among {ours, ace, real} clips.
-function genRow(label, color, opts, extraClass, cap){
+function genRow(label, paint, opts, extraClass, cap){
   const div = document.createElement('div');
-  div.className = 'row g' + (extraClass ? ' ' + extraClass : ''); div.style.setProperty('--sc', color);
+  div.className = 'row g' + (extraClass ? ' ' + extraClass : '');
+  div.style.setProperty('--sc', paint.acc); div.style.setProperty('--sct', paint.ink);
   const keys = Object.keys(opts);
   let curKey = keys[0];
   const clip = () => opts[curKey].clip;
   const dur = () => (cap ? esc(cap) + ' &middot; ' : '') + esc(clip()[2]) + ' s';
-  div.innerHTML = (extraClass === 'mix' ? '<span class="plus">+</span>' : '') +
-    `<button class="play" type="button" title="play / stop" aria-label="play ${esc(label)}">${PLAY}</button>` +
+  div.innerHTML = `<button class="play" type="button" title="play / stop" aria-label="play ${esc(label)}">${PLAY}</button>` +
     `<div class="rlab">${esc(label)}<span class="dur">${dur()}</span></div>` +
     `<canvas class="wave" title="play from here"></canvas>` +
     (keys.length > 1 ? '<div class="sw" role="group" aria-label="system">' +
@@ -379,7 +395,10 @@ function genRow(label, color, opts, extraClass, cap){
   });
   return div;
 }
-const stemColor = i => `var(--s${i % 6})`;
+// Paint of stem i: the accent is the Figure 1 pill stroke, the ink its pill text (see the token block).
+const stemPaint = i => ({acc: `var(--s${i % 6})`, ink: `var(--s${i % 6}t)`});
+// Context keeps the figure's blue; the mix row is neutral, as the figure paints "One mix" in ink.
+const CTX_PAINT = {acc: 'var(--ctxc)', ink: 'var(--ctxt)'}, MIX_PAINT = {acc: 'var(--ink)', ink: 'var(--ink)'};
 // -- inline figures (theme-aware via CSS variables) --
 function wavePath(x, y, n, amp){
   let d = `M${x} ${y}`;
@@ -387,12 +406,11 @@ function wavePath(x, y, n, amp){
   return d;
 }
 function figConcept(){
-  const P = [['Prompt 1', 'var(--s0)'], ['Prompt 2', 'var(--s1)'], ['Prompt N', 'var(--s2)']];
-  const S = [['Stem 1', 'var(--s0)'], ['Stem 2', 'var(--s1)'], ['Stem N', 'var(--s2)']];
+  const P = ['Prompt 1', 'Prompt 2', 'Prompt N'], S = ['Stem 1', 'Stem 2', 'Stem N'];
   const ys = [64, 104, 158];
-  const pill = (x, y, w, c, txt) => `<rect x="${x}" y="${y}" width="${w}" height="30" rx="7" fill="${c}" fill-opacity=".12" stroke="${c}" stroke-width="1.3"/>` +
-    `<path d="${wavePath(x + 12, y + 15, 3, 7)}" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/>` +
-    `<text x="${x + w - 12}" y="${y + 15}" text-anchor="end" dominant-baseline="central" font-size="13" font-weight="600" fill="${c}">${txt}</text>`;
+  const pill = (x, y, w, p, txt) => `<rect x="${x}" y="${y}" width="${w}" height="30" rx="7" fill="${p.acc}" fill-opacity=".12" stroke="${p.acc}" stroke-width="1.3"/>` +
+    `<path d="${wavePath(x + 12, y + 15, 3, 7)}" fill="none" stroke="${p.acc}" stroke-width="1.6" stroke-linecap="round"/>` +
+    `<text x="${x + w - 12}" y="${y + 15}" text-anchor="end" dominant-baseline="central" font-size="13" font-weight="600" fill="${p.ink}">${txt}</text>`;
   const dots = (x, y) => `<circle cx="${x}" cy="${y - 8}" r="1.8" fill="var(--muted)"/><circle cx="${x}" cy="${y}" r="1.8" fill="var(--muted)"/><circle cx="${x}" cy="${y + 8}" r="1.8" fill="var(--muted)"/>`;
   let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" role="img" aria-label="Concept figure: registered prompts and context go into the any-stem generator, which produces one stem per prompt; the generated stems and the context sum to one mix">`;
   s += `<defs><marker id="carr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="var(--muted)"/></marker></defs>`;
@@ -400,11 +418,11 @@ function figConcept(){
   // left panel
   s += `<rect x="16" y="14" width="260" height="262" rx="12" fill="var(--bg)" stroke="var(--hair)"/>`;
   s += `<text x="146" y="36" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="700" fill="var(--ink)">Registered audio</text>`;
-  P.forEach((p, i) => { s += pill(40, ys[i], 212, p[1], p[0]); });
+  P.forEach((t, i) => { s += pill(40, ys[i], 212, stemPaint(i), t); });
   s += dots(146, 141);
   s += `<rect x="40" y="222" width="212" height="34" rx="7" fill="var(--ctxc)" fill-opacity=".12" stroke="var(--ctxc)" stroke-width="1.3"/>`;
   s += `<path d="${wavePath(52, 239, 6, 9)}" fill="none" stroke="var(--ctxc)" stroke-width="1.6" stroke-linecap="round"/>`;
-  s += `<text x="240" y="239" text-anchor="end" dominant-baseline="central" font-size="13" font-weight="600" fill="var(--ctxc)">Context</text>`;
+  s += `<text x="240" y="239" text-anchor="end" dominant-baseline="central" font-size="13" font-weight="600" fill="var(--ctxt)">Context</text>`;
   // center block
   s += `<line x1="276" y1="126" x2="318" y2="126" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
   s += `<rect x="322" y="76" width="140" height="100" rx="12" fill="var(--ink)"/>`;
@@ -414,7 +432,7 @@ function figConcept(){
   // right panel
   s += `<rect x="508" y="14" width="236" height="196" rx="12" fill="var(--bg)" stroke="var(--hair)"/>`;
   s += `<text x="626" y="36" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="700" fill="var(--ink)">Generated stems</text>`;
-  S.forEach((p, i) => { s += pill(528, ys[i], 196, p[1], p[0]); });
+  S.forEach((t, i) => { s += pill(528, ys[i], 196, stemPaint(i), t); });
   s += dots(626, 141);
   // sum node and one mix
   s += `<line x1="626" y1="210" x2="626" y2="228" stroke="var(--muted)" stroke-width="2" marker-end="url(#carr)"/>`;
@@ -518,7 +536,8 @@ function cardHead(c){
   if (c.sub) h += `<span class="s">${esc(c.sub)}</span>`;
   h += `</div>`;
   if (c.badges && c.badges.length){
-    h += '<div class="badges">' + c.badges.map(b => `<span class="badge"><span class="bl">${esc(b.label)}</span>` +
+    // 1-3 badges: pills. 4+ (the score rows of Table 1) become a compact two-column key/value list.
+    h += `<div class="badges${c.badges.length >= 4 ? ' kv' : ''}">` + c.badges.map(b => `<span class="badge"><span class="bl">${esc(b.label)}</span>` +
       (b.value === undefined || b.value === null || b.value === '' ? '' : `<span class="bv">${esc(b.value)}</span>`) + '</span>').join('') + '</div>';
   }
   if (c.note) h += `<div class="note">${c.note}</div>`;
@@ -539,7 +558,7 @@ function buildCard(c){
   return card;
 }
 // Figure-shaped player, used by both the any-stem cards (prompt per stem) and the quality cards
-// (one stem, ours / ACE-Step / real): conditioning on the left, generated stems and the mix on the right.
+// (one stem, ours / ACE / real): conditioning on the left, generated stems and the mix on the right.
 function buildGenCard(c){
   const rows = {};
   const stems = [];
@@ -555,7 +574,7 @@ function buildGenCard(c){
   const ctx = rows.ctx;
   if (!ctx || !stems.length) return buildCard(c);
   const one = stems.length === 1;
-  // ours / ACE-Step / real of one stem: keyed <sys>_<stem>, or plain <sys> when the card has a single stem.
+  // ours / ACE / real of one stem: keyed <sys>_<stem>, or plain <sys> when the card has a single stem.
   const pick = g => { const o = {}; ['ours', 'ace', 'real'].forEach(s => {
     const r = rows[s + '_' + g] || (one ? rows[s] : null); if (r) o[s] = r; }); return o; };
   const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
@@ -568,15 +587,15 @@ function buildGenCard(c){
   const right = document.createElement('div'); right.className = 'gpanel right';
   right.innerHTML = `<div class="ptitle">Generated stem${one ? '' : 's'}</div>`;
   stems.forEach((st, i) => {
-    left.appendChild(genRow(st.label, stemColor(i), {prompt: rows['p_' + st.g]}, '', 'prompt'));
+    left.appendChild(genRow(st.label, stemPaint(i), {prompt: rows['p_' + st.g]}, '', 'prompt'));
     const o = pick(st.g);
-    if (Object.keys(o).length) right.appendChild(genRow(st.label, stemColor(i), o));
+    if (Object.keys(o).length) right.appendChild(genRow(st.label, stemPaint(i), o));
   });
   left.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
-  left.appendChild(genRow('Context', 'var(--ctxc)', {ctx: ctx}, '', 'given'));
+  left.appendChild(genRow('Context', CTX_PAINT, {ctx: ctx}, '', 'given'));
   right.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
   const mo = {}; ['ours', 'ace', 'real'].forEach(s => { if (rows['mix_' + s]) mo[s] = rows['mix_' + s]; });
-  if (Object.keys(mo).length) right.appendChild(genRow(one ? 'Full mix' : 'One mix', 'var(--teal)', mo, 'mix'));
+  if (Object.keys(mo).length) right.appendChild(genRow(one ? 'Full mix' : 'One mix', MIX_PAINT, mo, 'mix'));
   fig.appendChild(left); fig.appendChild(mid); fig.appendChild(right);
   card.appendChild(fig);
   return card;
