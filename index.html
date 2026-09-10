@@ -711,7 +711,7 @@ function render(){
   const nav = document.getElementById('navLinks'); nav.innerHTML = '';
   const main = document.getElementById('main'); main.innerHTML = '';
   (D.sections || []).forEach(sec => {
-    // Nav carries the short float identifiers: Fig 1 + T5, T1, T2, T3, Fig 2 + T4 + Fig 3, Notes.
+    // Nav carries the short float identifiers: Fig 1, T1, T2, T3, Fig 2 + T4 + Fig 3, Notes.
     const a = document.createElement('a'); a.className = 'lnk'; a.href = '#' + sec.id;
     a.textContent = sec.short || sec.float || sec.title;
     a.title = sec.float ? sec.float + ' \u00b7 ' + (sec.title || '') : (sec.title || '');
