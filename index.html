@@ -659,7 +659,7 @@ function buildSwitcher(sec){
 // -- page --
 function buildSection(sec){
   const s = document.createElement('section'); s.id = sec.id;
-  // Heading = the paper-float identifiers of the section ("Figure 1 + Table 5") and its title.
+  // Heading = the paper-float identifiers of the section (e.g. "Figure 2 + Table 4 + Figure 3") and its title.
   const hd = document.createElement('div'); hd.className = 'shead';
   if (sec.float){ const ch = document.createElement('span'); ch.className = 'fchip'; ch.textContent = sec.float; hd.appendChild(ch); }
   const h = document.createElement('h2'); h.textContent = sec.title || sec.float_title || ''; hd.appendChild(h);
