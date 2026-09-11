@@ -91,6 +91,31 @@ a.xl:hover,a.xl:focus-visible{border-color:var(--acc);color:var(--acc)}
 .pbody table:not(.ptab) th{font-weight:650;color:var(--muted)}
 .pbody table:not(.ptab) td:first-child,.pbody table:not(.ptab) th:first-child{text-align:left}
 /* example switcher: one card body per section, chips carry the paper identifiers */
+/* two-level switcher: the a / b / c blocks of paper Table 2, then the examples inside the active block */
+.blks{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.blk{display:inline-flex;align-items:baseline;gap:7px;font-family:inherit;font-size:12.5px;line-height:26px;
+  padding:0 11px;border:1px solid var(--hair);border-radius:9px;background:var(--card);color:var(--muted);cursor:pointer}
+.blk .bk{font:700 13px/26px ui-monospace,Menlo,monospace;text-transform:lowercase;color:var(--ink)}
+.blk:hover{border-color:var(--acc)}
+.blk.on{border-color:var(--acc);background:var(--soft)}
+.blk.on .bk,.blk.on .bt{color:var(--acc)}
+.chip[hidden]{display:none}
+/* what the conditioning swap did to the measurements the paper reports (MFCC timbre, chroma harmony) */
+.mvs{margin:7px 0 2px;border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+table.mtab{border-collapse:collapse;width:100%;font-size:12.5px;color:var(--ink)}
+table.mtab th{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+  text-align:left;padding:5px 10px;background:var(--bg);border-bottom:1px solid var(--hair);white-space:nowrap}
+table.mtab th.n,table.mtab td.n{text-align:right;font-family:ui-monospace,Menlo,monospace;white-space:nowrap}
+table.mtab td{padding:5px 10px;border-bottom:1px dotted var(--hair);vertical-align:baseline}
+table.mtab tr:last-child td{border-bottom:0}
+table.mtab .mm{display:inline-block;font:700 9.5px/14px ui-monospace,Menlo,monospace;letter-spacing:.04em;
+  border:1px solid var(--hair);border-radius:6px;padding:0 4px;margin-right:6px;color:var(--muted);vertical-align:1px}
+table.mtab .sysn{color:var(--muted);font-size:11.5px}
+table.mtab .ar{color:var(--muted);padding:0 3px}
+table.mtab .dl{font-weight:700}
+table.mtab .good{color:var(--good)}
+table.mtab .meh{color:var(--muted)}
+.mvs .mleg{font-size:11.5px;color:var(--muted);padding:6px 10px 7px;line-height:1.4;border-top:1px solid var(--hair)}
 .sws{display:flex;flex-wrap:wrap;gap:7px 6px;align-items:center;margin:14px 0 0}
 .sws .swg{flex:0 0 100%;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
   margin-top:5px;padding-top:6px;border-top:1px solid var(--hair)}
@@ -526,6 +551,30 @@ function floatBlock(blk){
 // (the audit's order; the figure lays the same six out as a 2x3 grid); absent -> nothing is drawn.
 const DOT = '\u25CF';                                     // the non-colour "this detector fired" cue
 const dnum = v => { const x = Number(v); return Math.abs(x) >= 100 ? x.toFixed(1) : x.toFixed(3); };
+// c.moves = [{metric, statement, expect, cells:[{system, base, swap, delta}]}] - what the swap did to the
+// measurements the paper's Table 2 reports. 'expect' is the paper's hypothesis for this row.
+function moveTable(c){
+  const rows = (c.moves || []).filter(r => r && r.statement && (r.cells || []).length);
+  if (!rows.length) return '';
+  const EXP = {up: 'should rise', down: 'should fall', flat: 'should stay put'};
+  const ok = (d, e) => e === 'up' ? d >= 0.05 : e === 'down' ? d <= -0.05 : Math.abs(d) < 0.1;
+  let h = '<div class="mvs"><table class="mtab"><thead><tr><th>What the swap should do</th>' +
+    '<th class="n">Before &rarr; after</th></tr></thead><tbody>';
+  rows.forEach(r => {
+    const cells = r.cells.map(x => {
+      const d = Number(x.delta), good = ok(d, r.expect);
+      return `<div><span class="sysn">${esc(x.system)}</span> ${esc(Number(x.base).toFixed(2))}` +
+        `<span class="ar">&rarr;</span>${esc(Number(x.swap).toFixed(2))} ` +
+        `<span class="dl ${good ? 'good' : 'meh'}">${d >= 0 ? '+' : ''}${esc(d.toFixed(2))}</span></div>`;
+    }).join('');
+    h += `<tr><td><span class="mm">${esc(r.metric)}</span>${esc(r.statement)} ` +
+      `<span class="sysn">(${esc(EXP[r.expect] || '')})</span></td><td class="n">${cells}</td></tr>`;
+  });
+  h += '</tbody></table><div class="mleg">MFCC is a timbre similarity, chroma a harmony correlation; ' +
+    'both run from &minus;1 to 1. Before = the generation from the original conditioning, after = the ' +
+    'regeneration once the marked input was replaced.</div></div>';
+  return h;
+}
 function detStrip(c){
   const ds = (c.detectors || []).filter(d => d && d.name && isFinite(Number(d.value)) && isFinite(Number(d.cut)));
   if (!ds.length) return '';
@@ -562,6 +611,7 @@ function cardHead(c){
   }
   if (c.note) h += `<div class="note">${c.note}</div>`;
   h += detStrip(c);
+  h += moveTable(c);
   return h;
 }
 function buildCard(c){
@@ -652,6 +702,12 @@ function selectExample(sid, idx, opts){
     if (!node){ node = buildBody(st.sec, st.sec.cards[idx]); st.nodes.set(idx, node); }
     swapIn(st.host, node);
     st.idx = idx;
+    // Two-level switcher: show only the chips of the active block and mark the block button.
+    const blk = st.sec.cards[idx].block || null;
+    if (blk){
+      st.chips.forEach(b => { b.hidden = !!b.dataset.b && b.dataset.b !== blk; });
+      if (st.blocks) st.blocks.querySelectorAll('.blk').forEach(t => t.classList.toggle('on', t.dataset.b === blk));
+    }
     requestAnimationFrame(() => (node.waves || []).forEach(w => drawWave(w[0], w[1])));
   }
   if (opts.focus && st.chips[idx]) st.chips[idx].focus({preventScroll: true});
@@ -691,9 +747,30 @@ function buildSwitcher(sec){
   const wrap = document.createElement('div');
   wrap.className = 'sws'; wrap.setAttribute('role', 'tablist'); wrap.setAttribute('aria-label', 'examples');
   const cards = sec.cards || [], chips = [], grouped = (sec.floats || []).length > 1;
+  // Two levels when the cards carry a block (the a / b / c blocks of the paper's Table 2): pick the block
+  // first, then the example inside it. Blocks keep the order in which they first appear.
+  const blocks = [];
+  cards.forEach(c => { if (c.block && !blocks.some(b => b.key === c.block)) blocks.push({key: c.block, title: c.block_title || ''}); });
+  let blockBar = null;
+  if (blocks.length > 1){
+    blockBar = document.createElement('div');
+    blockBar.className = 'blks';
+    blocks.forEach(bk => {
+      const t = document.createElement('button');
+      t.type = 'button'; t.className = 'blk'; t.dataset.b = bk.key;
+      t.innerHTML = `<span class="bk">${esc(bk.key)}</span><span class="bt">${esc(bk.title)}</span>`;
+      t.onclick = () => {
+        const st = SEC[sec.id];
+        const j = cards.findIndex(c => c.block === bk.key);
+        if (j >= 0) selectExample(sec.id, j, {focus: true});
+      };
+      blockBar.appendChild(t);
+    });
+    wrap.appendChild(blockBar);
+  }
   let prev = null, first = true;
   cards.forEach((c, i) => {
-    if (grouped && c.float && c.float !== prev){
+    if (grouped && !blocks.length && c.float && c.float !== prev){
       const g = document.createElement('span');
       g.className = 'swg' + (first ? ' first' : '');
       g.textContent = c.float + (c.float_title ? ' \u00b7 ' + c.float_title : '');
@@ -710,6 +787,7 @@ function buildSwitcher(sec){
       (c.case ? `<span class="ccase">${esc(c.case)}</span>` : '') +
       (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '');
     b.onclick = () => selectExample(sec.id, i, {focus: true});
+    if (c.block) b.dataset.b = c.block;
     chips.push(b); wrap.appendChild(b);
   });
   wrap.addEventListener('keydown', ev => {
@@ -718,14 +796,17 @@ function buildSwitcher(sec){
     const st = SEC[sec.id];
     if (!st || !st.chips.length) return;
     ev.preventDefault(); ev.stopPropagation();        // arrows move between examples, not the playhead
-    const n = st.chips.length;
-    let i = st.idx < 0 ? 0 : st.idx;
-    if (k === 'Home') i = 0;
-    else if (k === 'End') i = n - 1;
-    else i = (i + (k === 'ArrowLeft' ? -1 : 1) + n) % n;
+    const cur = st.sec.cards[st.idx < 0 ? 0 : st.idx];
+    const blk = cur && cur.block;
+    const idxs = st.sec.cards.map((c, j) => j).filter(j => !blk || st.sec.cards[j].block === blk);
+    const at = Math.max(0, idxs.indexOf(st.idx < 0 ? idxs[0] : st.idx)), n = idxs.length;
+    let i;
+    if (k === 'Home') i = idxs[0];
+    else if (k === 'End') i = idxs[n - 1];
+    else i = idxs[(at + (k === 'ArrowLeft' ? -1 : 1) + n) % n];
     selectExample(sec.id, i, {focus: true});
   });
-  return {wrap: wrap, chips: chips};
+  return {wrap: wrap, chips: chips, blocks: blockBar};
 }
 
 // -- page --
@@ -757,7 +838,7 @@ function buildSection(sec){
     const host = document.createElement('div'); host.className = 'exhost'; host.id = 'ex-' + sec.id;
     host.setAttribute('role', 'tabpanel'); host.setAttribute('aria-label', 'selected example');
     s.appendChild(host);
-    SEC[sec.id] = {sec: sec, host: host, chips: sw.chips, idx: -1, nodes: new Map()};
+    SEC[sec.id] = {sec: sec, host: host, chips: sw.chips, blocks: sw.blocks, idx: -1, nodes: new Map()};
   }
   return s;
 }
