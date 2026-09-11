@@ -48,6 +48,10 @@ section{scroll-margin-top:calc(var(--navh) + 12px);margin:26px 0 0;padding-top:1
 section:first-of-type{border-top:0;padding-top:0}
 .shead{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
 .shead h2{margin:0}
+.shead h2 .snum{color:var(--muted);font-weight:650;margin-right:1px}
+/* right-aligned, muted cross-reference to the paper: "paper 4.3 . Figure 2, Table 3" */
+.shead .pref{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap}
+.shead .pref .sep{padding:0 2px;opacity:.65}
 .fchip{flex:0 0 auto;font-size:12px;font-weight:700;line-height:20px;letter-spacing:.04em;text-transform:uppercase;
   color:#fff;background:var(--acc);border-radius:8px;padding:0 9px;white-space:nowrap}
 .intro{max-width:860px}
@@ -67,39 +71,35 @@ details.pfloat[open] .cv{transform:rotate(90deg)}
 .pbody{padding:9px 12px 11px;overflow-x:auto}
 .pbody>svg{display:block;width:100%;height:auto;max-height:520px;margin:0 auto;font-family:inherit}
 .pcap{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4}
-/* case coverage of the memorization audit: every verdict case, its count, its examples.
-   The cases with no instance are a result of the audit, so their rows are drawn, not dropped. */
-.ccov{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:10px 12px 12px;margin:10px 0}
-.ccov .ct{font-size:14px;font-weight:700;color:var(--ink)}
-.ccov .csub{font-size:12.5px;color:var(--muted);margin:2px 0 7px;line-height:1.4}
-table.ctab{border-collapse:collapse;width:100%;font-size:12.5px;color:var(--ink)}
-table.ctab th{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
-  text-align:left;padding:0 10px 4px 0;border-bottom:1px solid var(--hair);white-space:nowrap}
-table.ctab td{padding:5px 10px 5px 0;border-bottom:1px dotted var(--hair);vertical-align:top}
-table.ctab th.n,table.ctab td.n{text-align:right;padding-right:14px}
-table.ctab td.n{font:700 13px/18px ui-monospace,Menlo,monospace;white-space:nowrap}
-table.ctab .cs{font-weight:700;white-space:nowrap}
-table.ctab .cn{display:block;font-size:11.5px;font-weight:400;color:var(--muted);line-height:1.35;white-space:normal}
-table.ctab tr.z td{background:var(--soft)}
-table.ctab .nf{font-weight:700;color:var(--ink)}
-a.xl{display:inline-block;font:700 11.5px/18px ui-monospace,Menlo,monospace;color:var(--acc2);text-decoration:none;
-  border:1px solid var(--hair);border-radius:7px;padding:0 7px;margin:0 4px 3px 0;background:var(--bg)}
-a.xl:hover,a.xl:focus-visible{border-color:var(--acc);color:var(--acc)}
 /* fallback look for a paper table; template/ptab.css (injected below) may override it */
 .pbody table:not(.ptab){border-collapse:collapse;font-size:12.5px;margin:0 auto;color:var(--ink)}
 .pbody table:not(.ptab) th,.pbody table:not(.ptab) td{padding:3px 8px;text-align:right;white-space:nowrap}
 .pbody table:not(.ptab) th{font-weight:650;color:var(--muted)}
 .pbody table:not(.ptab) td:first-child,.pbody table:not(.ptab) th:first-child{text-align:left}
-/* example switcher: one card body per section, chips carry the paper identifiers */
-/* two-level switcher: the a / b / c blocks of paper Table 2, then the examples inside the active block */
+/* example switcher: one card body per panel, chips carry the paper identifiers */
+/* level bars above the chips: the four retrievers, then the verdict cases that retriever produced
+   (memorization audit), or the a / b / c blocks of paper Table 2. The chips are the innermost level. */
 .blks{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
 .blk{display:inline-flex;align-items:baseline;gap:7px;font-family:inherit;font-size:12.5px;line-height:26px;
   padding:0 11px;border:1px solid var(--hair);border-radius:9px;background:var(--card);color:var(--muted);cursor:pointer}
 .blk .bk{font:700 13px/26px ui-monospace,Menlo,monospace;text-transform:lowercase;color:var(--ink)}
+.blk .bn{font-weight:700;color:var(--ink);white-space:nowrap}
 .blk:hover{border-color:var(--acc)}
 .blk.on{border-color:var(--acc);background:var(--soft)}
-.blk.on .bk,.blk.on .bt{color:var(--acc)}
+.blk.on .bk,.blk.on .bn,.blk.on .bt{color:var(--acc)}
+.blks.sub{margin-bottom:8px}
+.blks.sub .blk{font-size:12px;line-height:24px;padding:0 9px}
+.blks.sub .blk .bn{font-weight:650}
+.blk[hidden]{display:none}
 .chip[hidden]{display:none}
+/* small uppercase caption naming a level ("Retriever", "Human verdict") */
+.lvh{flex:0 0 100%;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);margin:2px 0 1px}
+/* a card kind with its own block below the hierarchy (the regeneration gate) */
+.kblk{margin-top:18px;padding-top:12px;border-top:1px dashed var(--hair)}
+.kblk .kbt{font-size:14.5px;font-weight:700;color:var(--ink)}
+.kblk .kbs{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4;max-width:860px}
+.kblk .sws{margin-top:9px}
 /* what the conditioning swap did to the measurements the paper reports (MFCC timbre, chroma harmony) */
 .mvs{margin:7px 0 2px;border:1px solid var(--hair);border-radius:10px;overflow:hidden}
 table.mtab{border-collapse:collapse;width:100%;font-size:12.5px;color:var(--ink)}
@@ -131,6 +131,10 @@ table.mtab .meh{color:var(--muted)}
 .chip .ccase{flex:0 0 auto;font-size:11px;font-weight:700;line-height:17px;color:var(--ink);background:var(--bg);
   border:1px solid var(--hair);border-radius:6px;padding:0 6px;white-space:nowrap}
 .chip.on .ccase{color:#fff;background:transparent;border-color:#fff}
+/* retrieval rank of a memorization example within its retriever's flagged set (rank 1 = closest) */
+.chip .crank{flex:0 0 auto;font:600 10.5px/17px ui-monospace,Menlo,monospace;color:var(--muted);
+  border:1px solid var(--hair);border-radius:6px;padding:0 5px;white-space:nowrap}
+.chip.on .crank{color:#fff;border-color:#fff}
 .chip:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
 .exhost{min-height:64px}
 .card{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:12px 16px;margin:8px 0 0}
@@ -153,7 +157,7 @@ table.mtab .meh{color:var(--muted)}
   background:transparent;border:0;border-bottom:1px dotted var(--hair);border-radius:0;line-height:18px}
 .badges.kv .badge .bl{color:var(--muted);white-space:normal;min-width:0}
 .badges.kv .badge .bv{flex:0 0 auto}
-/* six-detector score strip: the same six detectors as paper Figure 3, for one example.
+/* six-detector score strip: the six detectors of the memorization audit, for one example.
    A cell that fired is marked three ways, so colour alone never carries it: filled background + thicker
    accent border, a bullet before the detector name, and a bold value. */
 .dstrip{margin:7px 0 3px}
@@ -233,13 +237,13 @@ footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--hair);font-si
   .row.g .rlab{width:76px}
   .sws{gap:6px 5px}
   .chip{padding:0 8px;white-space:normal}
+  .shead .pref{flex:0 0 100%;margin-left:0;white-space:normal}
   .badges.kv{grid-template-columns:minmax(0,1fr);max-width:none}
   .dgrid{grid-template-columns:repeat(3,minmax(0,1fr))}   /* two rows of three */
   .dcell .dv{font-size:13px}
-  table.ctab .cs{white-space:normal}
 }
-/* Paper floats on the demo page: LaTeX tables rendered as HTML (.ptab) and the
-   six-panel detector figure (.fig3, two SVG variants switched by theme).
+/* Paper floats on the demo page: LaTeX tables rendered as HTML (.ptab).
+   Rules for the detector figure that left the page on 2026-09-11 were dropped with it.
    Tokens mirror template/index.html; memOr/memBl are the paper's memorization colors
    (RGB 213,94,0 and 0,114,178 in the light theme). ASCII only. */
 :root{--memor:#D55E00;--membl:#0072B2}
@@ -275,19 +279,6 @@ table.ptab b{font-weight:700}
 table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:11px;color:var(--muted);white-space:normal}
 @media (max-width:640px){table.ptab{font-size:11.5px}table.ptab th,table.ptab td{padding:2.5px 5px}
   table.ptab tbody tr.ind th:first-child{padding-left:12px}}
-
-/* six-panel detector figure: light and dark SVG, only one is displayed */
-.fig3{margin:0}
-.fig3 svg{display:block;width:100%;height:auto}
-.fig3 .f3l{display:block}
-.fig3 .f3d{display:none}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]) .fig3 .f3l{display:none}
-  :root:not([data-theme="light"]) .fig3 .f3d{display:block}}
-:root[data-theme="dark"] .fig3 .f3l{display:none}
-:root[data-theme="dark"] .fig3 .f3d{display:block}
-:root[data-theme="light"] .fig3 .f3l{display:block}
-:root[data-theme="light"] .fig3 .f3d{display:none}
 /* the float summary already prints "Table 3 - Human verdicts...", so the table's own
    <caption> is kept for assistive technology (accessible table name) but not painted. */
 .pbody table.ptab>caption{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
@@ -546,9 +537,9 @@ function floatBlock(blk){
 }
 
 // -- cards --
-// Six-detector score strip: the same six detectors as paper Figure 3 (same names, same thresholds), for this
-// one example. c.detectors = [{det, name, value, cut, flagged, distance}] in the order cards.json gives them
-// (the audit's order; the figure lays the same six out as a 2x3 grid); absent -> nothing is drawn.
+// Six-detector score strip: the six detectors of the audit (the same names and thresholds the paper reports),
+// for this one example. c.detectors = [{det, name, value, cut, flagged, distance}] in the order cards.json
+// gives them (the audit's order); absent -> nothing is drawn.
 const DOT = '\u25CF';                                     // the non-colour "this detector fired" cue
 const dnum = v => { const x = Number(v); return Math.abs(x) >= 100 ? x.toFixed(1) : x.toFixed(3); };
 // c.moves = [{metric, statement, expect, cells:[{system, base, swap, delta}]}] - what the swap did to the
@@ -594,7 +585,7 @@ function detStrip(c){
     (sim.length ? `; ${nm(sim)} when it is at or above.` : '.');
   else if (sim.length) leg += ` ${nm(sim)} fire when the value is at or above the threshold.`;
   return `<div class="dstrip" role="group" aria-label="detector scores">` +
-    `<div class="dslab">Detector scores <span>the six detectors of Figure 3, for this example</span></div>` +
+    `<div class="dslab">Detector scores <span>the six detectors of the audit, for this example</span></div>` +
     `<div class="dgrid">${cells}</div><div class="dleg">${leg}</div></div>`;
 }
 function cardHead(c){
@@ -680,8 +671,30 @@ function buildBody(sec, card){
   return node;
 }
 
-// -- example switcher: one card body per section, chips carry the paper identifiers --
-const SEC = {};   // section id -> {sec, host, chips, idx, nodes}
+// -- example switcher: level bars, chips, one card body per panel --
+// A section owns one or more panels. A panel = an optional stack of level bars + a chip row + one card body
+// host, over a subset of the section's cards: the memorization examples form a three-level hierarchy
+// (retriever -> verdict case -> example in retrieval-rank order), the Table 2 examples one level (the a / b / c
+// blocks), and a card kind with its own block (the regeneration gate) gets a panel of its own below them.
+// Card indexes stay global (indexes into sec.cards), so '#mem-T3.3' addresses an example in any panel.
+const SEC = {};   // section id -> {sec, panels, byIdx: Map(card index -> panel)}
+// Known levels, outermost first as named in sec.levels. key() must return a non-empty string for every card
+// of the panel or the whole stack is dropped (a data.json written before these fields falls back to one flat
+// chip row). sub() is the small print on a level button, over the cards that button stands for.
+const LEVELS = {
+  retriever: {head: 'Retriever', mono: false,
+    key: c => c.retriever_key || slug(c.retriever), name: c => c.retriever || titleize(c.retriever_key),
+    sub: cs => { const t = Number((cs.filter(c => Number(c.rank_total) > 0)[0] || {}).rank_total);
+                 return t > 0 ? t + ' flagged stems' : ''; }},
+  case: {head: 'Human verdict', mono: false,
+    key: c => slug(c.case), name: c => c.case || '',
+    // How many of the retriever's flagged stems got this verdict (paper Table 3), then how many are here.
+    sub: cs => { const ex = cs.length + (cs.length === 1 ? ' example' : ' examples');
+                 const c0 = cs.filter(c => Number(c.case_total) > 0 && Number(c.rank_total) > 0)[0];
+                 return c0 ? Number(c0.case_total) + ' of ' + Number(c0.rank_total) + ' flagged, ' + ex : ex; }},
+  block: {head: '', mono: true,
+    key: c => c.block || '', name: c => c.block || '', sub: cs => cs[0].block_title || ''},
+};
 function swapIn(host, node){
   while (host.firstChild) host.removeChild(host.firstChild);
   host.appendChild(node);
@@ -690,155 +703,211 @@ function setHash(h){
   // Linkable and reload-safe; replaceState does not scroll and does not grow the history.
   try { history.replaceState(null, '', '#' + h); } catch (e) {}
 }
-function selectExample(sid, idx, opts){
-  const st = SEC[sid];
+// data.json written before sec.levels existed: the a / b / c blocks are the one level that can be inferred.
+function deriveLevels(cards){
+  const bs = [];
+  cards.forEach(c => { if (c.block && bs.indexOf(c.block) < 0) bs.push(c.block); });
+  return bs.length > 1 ? ['block'] : [];
+}
+function buildPanel(sec, idxs, lvNames, opts){
   opts = opts || {};
-  if (!st || !st.sec.cards || !st.sec.cards[idx]) return;
-  if (st.idx !== idx){
-    stopAll();                                   // never leave an example playing behind the reader
-    st.chips.forEach((b, i) => { const on = i === idx;
-      b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; });
-    let node = st.nodes.get(idx);
-    if (!node){ node = buildBody(st.sec, st.sec.cards[idx]); st.nodes.set(idx, node); }
-    swapIn(st.host, node);
-    st.idx = idx;
-    // Two-level switcher: show only the chips of the active block and mark the block button.
-    const blk = st.sec.cards[idx].block || null;
-    if (blk){
-      st.chips.forEach(b => { b.hidden = !!b.dataset.b && b.dataset.b !== blk; });
-      if (st.blocks) st.blocks.querySelectorAll('.blk').forEach(t => t.classList.toggle('on', t.dataset.b === blk));
+  const cards = sec.cards;
+  const wrap = document.createElement('div');
+  wrap.className = 'sws'; wrap.setAttribute('role', 'tablist');
+  wrap.setAttribute('aria-label', opts.label || 'examples');
+  const host = document.createElement('div');
+  host.className = 'exhost'; host.id = 'ex-' + sec.id + (opts.suffix || '');
+  host.setAttribute('role', 'tabpanel'); host.setAttribute('aria-label', 'selected example');
+  let lvs = (lvNames || []).map(n => ({name: n, d: LEVELS[n]})).filter(x => x.d);
+  const path = new Map();
+  idxs.forEach(gi => path.set(gi, lvs.map(x => String(x.d.key(cards[gi]) || ''))));
+  if (!idxs.every(gi => path.get(gi).every(Boolean))){        // a card without a level key: flat fallback
+    lvs = [];
+    idxs.forEach(gi => path.set(gi, []));
+  }
+  const P = {sec: sec, idxs: idxs, host: host, wrap: wrap, lvs: lvs, path: path,
+             bars: [], chips: [], nodes: new Map(), idx: -1};
+  P.active = () => path.get(P.idx >= 0 ? P.idx : idxs[0]) || [];
+  // do the first n level keys of this card agree with the selected one?
+  P.match = (gi, n) => { const a = P.active(), b = path.get(gi) || [];
+    for (let i = 0; i < n; i++) if (a[i] !== b[i]) return false;
+    return true; };
+  lvs.forEach((x, d) => {
+    if (x.d.head){
+      const h = document.createElement('span'); h.className = 'lvh'; h.textContent = x.d.head;
+      wrap.appendChild(h);
     }
-    requestAnimationFrame(() => (node.waves || []).forEach(w => drawWave(w[0], w[1])));
-  }
-  if (opts.focus && st.chips[idx]) st.chips[idx].focus({preventScroll: true});
-  if (opts.hash !== false) setHash(sid + '-' + (st.sec.cards[idx].label || st.sec.cards[idx].id));
-}
-// sec.cases = [{case, count, cards, note}] -> the audit's case coverage, drawn under the Table 3 block.
-// The cases with count 0 are a result of the audit ("none found"), so their rows are printed, not hidden.
-function caseTable(sec){
-  const rows = (sec.cases || []).filter(r => r && r.case);
-  if (!rows.length) return null;
-  const num = r => Number(r.count), all = rows.every(r => isFinite(num(r)));
-  const tot = all ? rows.reduce((a, r) => a + num(r), 0) : null;
-  let h = `<div class="ct">Case coverage of the audit</div><div class="csub">One row per verdict case of Figure 2: ` +
-    `how many stems the human audit put in it` + (tot !== null ? ` out of the ${tot} judged` : '') +
-    `, and the examples on this page that demonstrate it.</div>`;
-  h += '<table class="ctab"><thead><tr><th>Verdict case</th><th class="n">Stems</th>' +
-    '<th>Examples on this page</th></tr></thead><tbody>';
-  rows.forEach(r => {
-    // A count of 0 is a finding of the audit ("none found"); a missing count is only an unknown.
-    const n = num(r), has = isFinite(n), zero = has && n <= 0, ids = (r.cards || []).map(String).filter(Boolean);
-    h += `<tr${zero ? ' class="z"' : ''}><td><span class="cs">${esc(r.case)}</span>` +
-      (r.note ? `<span class="cn">${esc(r.note)}</span>` : '') + '</td>' +
-      `<td class="n">${has ? esc(n) : '&ndash;'}</td><td>` +
-      (ids.length ? ids.map(x => `<a class="xl" href="#${esc(sec.id)}-${encodeURIComponent(x)}" data-ex="${esc(x)}">${esc(x)}</a>`).join('')
-                  : `<span class="nf">${zero ? 'none found in the audit' : 'no example on this page'}</span>`) +
-      '</td></tr>';
-  });
-  const wrap = document.createElement('div');
-  wrap.className = 'ccov';
-  wrap.innerHTML = h + '</tbody></table>';
-  wrap.querySelectorAll('a.xl').forEach(a => a.onclick = ev => {
-    if (gotoExample(sec.id, a.dataset.ex)) ev.preventDefault();   // no link if the switcher is not up yet
-  });
-  return wrap;
-}
-function buildSwitcher(sec){
-  const wrap = document.createElement('div');
-  wrap.className = 'sws'; wrap.setAttribute('role', 'tablist'); wrap.setAttribute('aria-label', 'examples');
-  const cards = sec.cards || [], chips = [], grouped = (sec.floats || []).length > 1;
-  // Two levels when the cards carry a block (the a / b / c blocks of the paper's Table 2): pick the block
-  // first, then the example inside it. Blocks keep the order in which they first appear.
-  const blocks = [];
-  cards.forEach(c => { if (c.block && !blocks.some(b => b.key === c.block)) blocks.push({key: c.block, title: c.block_title || ''}); });
-  let blockBar = null;
-  if (blocks.length > 1){
-    blockBar = document.createElement('div');
-    blockBar.className = 'blks';
-    blocks.forEach(bk => {
-      const t = document.createElement('button');
-      t.type = 'button'; t.className = 'blk'; t.dataset.b = bk.key;
-      t.innerHTML = `<span class="bk">${esc(bk.key)}</span><span class="bt">${esc(bk.title)}</span>`;
-      t.onclick = () => {
-        const st = SEC[sec.id];
-        const j = cards.findIndex(c => c.block === bk.key);
-        if (j >= 0) selectExample(sec.id, j, {focus: true});
-      };
-      blockBar.appendChild(t);
+    const bar = document.createElement('div');
+    bar.className = 'blks' + (d ? ' sub' : '');
+    const items = [];
+    idxs.forEach(gi => {                                     // one button per distinct key path, in order
+      const k = path.get(gi).slice(0, d + 1).join('|');
+      let it = items.filter(y => y.k === k)[0];
+      if (!it){ it = {k: k, members: [], btn: null}; items.push(it); }
+      it.members.push(gi);
     });
-    wrap.appendChild(blockBar);
+    items.forEach(it => {
+      const cs = it.members.map(gi => cards[gi]);
+      const sub = x.d.sub ? x.d.sub(cs) : '';
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'blk';
+      b.innerHTML = `<span class="${x.d.mono ? 'bk' : 'bn'}">${esc(x.d.name(cs[0]) || '')}</span>` +
+        (sub ? `<span class="bt">${esc(sub)}</span>` : '');
+      b.onclick = () => P.select(it.members[0], {focus: true});   // land on the first example below it
+      it.btn = b;
+      bar.appendChild(b);
+    });
+    wrap.appendChild(bar);
+    P.bars.push({d: d, items: items});
+  });
+  if (lvs.length){
+    const h = document.createElement('span'); h.className = 'lvh';
+    h.textContent = lvs.some(x => x.name === 'retriever') ? 'Examples, closest retrieval first' : 'Examples';
+    wrap.appendChild(h);
   }
+  const grouped = (sec.floats || []).length > 1 && !lvs.length;
   let prev = null, first = true;
-  cards.forEach((c, i) => {
-    if (grouped && !blocks.length && c.float && c.float !== prev){
+  idxs.forEach(gi => {
+    const c = cards[gi];
+    if (grouped && c.float && c.float !== prev){              // flat switcher over merged floats: group label
       const g = document.createElement('span');
       g.className = 'swg' + (first ? ' first' : '');
       g.textContent = c.float + (c.float_title ? ' \u00b7 ' + c.float_title : '');
       wrap.appendChild(g); first = false;
     }
     prev = c.float;
+    const rank = (Number(c.rank) > 0 && Number(c.rank_total) > 0) ? 'rank ' + c.rank + ' / ' + c.rank_total : '';
+    const ownCase = c.case && !lvs.some(x => x.name === 'case');   // the case level already prints it
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'chip' + (i === 0 ? ' on' : '');
-    b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-    b.setAttribute('aria-controls', 'ex-' + sec.id);
-    b.tabIndex = i === 0 ? 0 : -1;
-    b.title = (c.float ? c.float + ' \u00b7 ' : '') + (c.case ? c.case + ' \u00b7 ' : '') + (c.title || '');
+    b.type = 'button'; b.className = 'chip';
+    b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', 'false');
+    b.setAttribute('aria-controls', host.id);
+    b.tabIndex = -1;
+    b.title = (c.retriever ? c.retriever + ' \u00b7 ' : '') + (c.case ? c.case + ' \u00b7 ' : '') +
+      (c.title || '') + (rank ? ' \u00b7 ' + rank : '');
     b.innerHTML = `<span class="cid">${esc(c.label || c.id)}</span>` +
-      (c.case ? `<span class="ccase">${esc(c.case)}</span>` : '') +
-      (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '');
-    b.onclick = () => selectExample(sec.id, i, {focus: true});
-    if (c.block) b.dataset.b = c.block;
-    chips.push(b); wrap.appendChild(b);
+      (ownCase ? `<span class="ccase">${esc(c.case)}</span>` : '') +
+      (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '') +
+      (rank ? `<span class="crank">${esc(rank)}</span>` : '');
+    b.onclick = () => P.select(gi, {focus: true});
+    P.chips.push(b);
+    wrap.appendChild(b);
   });
+  P.sync = () => {
+    P.chips.forEach((b, j) => {
+      const gi = idxs[j], on = gi === P.idx;
+      b.hidden = !P.match(gi, P.lvs.length);                  // only the chips of the active key path
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+    });
+    P.bars.forEach(bar => bar.items.forEach(it => {
+      it.btn.hidden = !P.match(it.members[0], bar.d);         // level 2+ shows only the active parent's keys
+      it.btn.classList.toggle('on', P.match(it.members[0], bar.d + 1));
+    }));
+  };
+  P.select = (gi, o) => {
+    o = o || {};
+    if (idxs.indexOf(gi) < 0 || !cards[gi]) return;
+    if (P.idx !== gi){
+      stopAll();                                              // never leave an example playing behind the reader
+      P.idx = gi;
+      let node = P.nodes.get(gi);
+      if (!node){ node = buildBody(sec, cards[gi]); P.nodes.set(gi, node); }
+      swapIn(host, node);
+      P.sync();
+      requestAnimationFrame(() => (node.waves || []).forEach(w => drawWave(w[0], w[1])));
+    }
+    const j = idxs.indexOf(gi);
+    if (o.focus && P.chips[j]) P.chips[j].focus({preventScroll: true});
+    if (o.hash !== false) setHash(sec.id + '-' + (cards[gi].label || cards[gi].id));
+  };
   wrap.addEventListener('keydown', ev => {
     const k = ev.key;
     if (k !== 'ArrowLeft' && k !== 'ArrowRight' && k !== 'Home' && k !== 'End') return;
-    const st = SEC[sec.id];
-    if (!st || !st.chips.length) return;
-    ev.preventDefault(); ev.stopPropagation();        // arrows move between examples, not the playhead
-    const cur = st.sec.cards[st.idx < 0 ? 0 : st.idx];
-    const blk = cur && cur.block;
-    const idxs = st.sec.cards.map((c, j) => j).filter(j => !blk || st.sec.cards[j].block === blk);
-    const at = Math.max(0, idxs.indexOf(st.idx < 0 ? idxs[0] : st.idx)), n = idxs.length;
-    let i;
-    if (k === 'Home') i = idxs[0];
-    else if (k === 'End') i = idxs[n - 1];
-    else i = idxs[(at + (k === 'ArrowLeft' ? -1 : 1) + n) % n];
-    selectExample(sec.id, i, {focus: true});
+    ev.preventDefault(); ev.stopPropagation();                // arrows move between examples, not the playhead
+    const vis = idxs.filter(gi => P.match(gi, P.lvs.length)); // the innermost level only
+    if (!vis.length) return;
+    const at = Math.max(0, vis.indexOf(P.idx)), n = vis.length;
+    let gi;
+    if (k === 'Home') gi = vis[0];
+    else if (k === 'End') gi = vis[n - 1];
+    else gi = vis[(at + (k === 'ArrowLeft' ? -1 : 1) + n) % n];
+    P.select(gi, {focus: true});
   });
-  return {wrap: wrap, chips: chips, blocks: blockBar};
+  const el = document.createElement('div');
+  el.className = opts.title ? 'pnl kblk' : 'pnl';
+  if (opts.title){
+    const t = document.createElement('div'); t.className = 'kbt'; t.textContent = opts.title;
+    el.appendChild(t);
+    if (opts.sub){
+      const sb = document.createElement('div'); sb.className = 'kbs'; sb.textContent = opts.sub;
+      el.appendChild(sb);
+    }
+  }
+  el.appendChild(wrap); el.appendChild(host);
+  P.el = el;
+  return P;
+}
+function selectExample(sid, idx, opts){
+  const st = SEC[sid];
+  if (!st) return;
+  const P = st.byIdx.get(idx);
+  if (P) P.select(idx, opts);
 }
 
 // -- page --
+// "paper 4.3 . Figure 2, Table 3": the paper section the material comes from and its float(s), muted and
+// right-aligned in the heading (demo_build.SECTIONS owns the mapping).
+function paperRef(sec){
+  const bits = [];
+  if (sec.paper) bits.push('paper ' + esc(sec.paper));
+  if (sec.float) bits.push(esc(sec.float));
+  return bits.join(' <span class="sep">&middot;</span> ');
+}
 function buildSection(sec){
   const s = document.createElement('section'); s.id = sec.id;
-  // Heading = the paper-float identifiers of the section (e.g. "Figure 2 + Table 3 + Figure 3") and its title.
+  // Heading = the web section number and the title, plus the paper cross-reference on the right.
   const hd = document.createElement('div'); hd.className = 'shead';
-  if (sec.float){ const ch = document.createElement('span'); ch.className = 'fchip'; ch.textContent = sec.float; hd.appendChild(ch); }
-  const h = document.createElement('h2'); h.textContent = sec.title || sec.float_title || ''; hd.appendChild(h);
+  const h = document.createElement('h2');
+  h.innerHTML = (sec.num ? `<span class="snum">${esc(sec.num)}.</span> ` : '') + esc(sec.title || '');
+  hd.appendChild(h);
+  const ref = paperRef(sec);
+  if (ref){
+    const r = document.createElement('span'); r.className = 'pref'; r.innerHTML = ref;
+    if (sec.paper_title) r.title = 'Paper section ' + sec.paper + ', ' + sec.paper_title;
+    hd.appendChild(r);
+  }
   s.appendChild(hd);
   if (sec.intro_html){ const d = document.createElement('div'); d.className = 'intro'; d.innerHTML = sec.intro_html; s.appendChild(d); }
   let blocks = sec.floats || [];
   if (!blocks.length){
     const fk = sec.figure || FIG_AT[sec.id];
-    if (fk && FIGS[fk]) blocks = [{label: sec.float, title: sec.float_title, kind: 'figure', figure: fk, caption: sec.figure_caption}];
+    if (fk && FIGS[fk]) blocks = [{label: sec.float, title: sec.title, kind: 'figure', figure: fk, caption: sec.figure_caption}];
   }
-  const cases = caseTable(sec);                    // null unless the section carries sec.cases
-  let placed = false;
-  blocks.forEach(b => {
-    const el = floatBlock(b);
-    if (el) s.appendChild(el);
-    // The coverage table is the reading of the audit table (Table 3), so it sits right under that block.
-    if (el && cases && !placed && (b.key === 't3' || /table\s*3/i.test(b.label || ''))){ s.appendChild(cases); placed = true; }
-  });
-  if (cases && !placed) s.appendChild(cases);      // no audit table on the page: keep the result visible
-  if ((sec.cards || []).length){
-    const sw = buildSwitcher(sec);
-    s.appendChild(sw.wrap);
-    const host = document.createElement('div'); host.className = 'exhost'; host.id = 'ex-' + sec.id;
-    host.setAttribute('role', 'tabpanel'); host.setAttribute('aria-label', 'selected example');
-    s.appendChild(host);
-    SEC[sec.id] = {sec: sec, host: host, chips: sw.chips, blocks: sw.blocks, idx: -1, nodes: new Map()};
+  blocks.forEach(b => { const el = floatBlock(b); if (el) s.appendChild(el); });
+  const cards = sec.cards || [];
+  if (cards.length){
+    // Cards of a kind that gets its own block (the regeneration gate) are split off into their own panel
+    // below the hierarchy; everything else is the hierarchy (or the flat switcher).
+    const kinds = (sec.kinds || []).filter(k => k && k.kind);
+    const own = new Map();
+    kinds.forEach(k => own.set(k.kind, []));
+    const main = [];
+    cards.forEach((c, i) => {
+      const k = c.kind || '';
+      if (k && own.has(k)) own.get(k).push(i); else main.push(i);
+    });
+    const lv = (sec.levels && sec.levels.length) ? sec.levels : deriveLevels(main.map(i => cards[i]));
+    const panels = [];
+    if (main.length) panels.push(buildPanel(sec, main, lv, {}));
+    kinds.forEach(k => {
+      const idxs = own.get(k.kind) || [];
+      if (idxs.length) panels.push(buildPanel(sec, idxs, [], {title: k.title, sub: k.sub, label: k.title, suffix: '-' + k.kind}));
+    });
+    const byIdx = new Map();
+    panels.forEach(P => { P.idxs.forEach(gi => byIdx.set(gi, P)); s.appendChild(P.el); });
+    SEC[sec.id] = {sec: sec, panels: panels, byIdx: byIdx};
   }
   return s;
 }
@@ -850,12 +919,6 @@ function findExample(sid, label){
   let idx = -1;
   cards.forEach((c, i) => { if (idx < 0 && (String(c.label || '').toLowerCase() === lab || String(c.id || '').toLowerCase() === lab)) idx = i; });
   return idx;
-}
-function gotoExample(sid, label){
-  const idx = findExample(sid, label);
-  if (idx < 0) return false;
-  selectExample(sid, idx, {focus: true});
-  return true;
 }
 function applyHash(scroll){
   // '#<section>-<identifier>', e.g. '#mem-T3.3'; a plain '#<section>' is left to the browser anchor.
@@ -883,15 +946,16 @@ function render(){
   const nav = document.getElementById('navLinks'); nav.innerHTML = '';
   const main = document.getElementById('main'); main.innerHTML = '';
   (D.sections || []).forEach(sec => {
-    // Nav carries the short float identifiers: Fig 1, T1, T2, Fig 2 + T3 + Fig 3, Notes.
+    // Nav carries the web section number and a short label: 1. Generation, 2. Swaps, 3. Memorization, Notes.
     const a = document.createElement('a'); a.className = 'lnk'; a.href = '#' + sec.id;
-    a.textContent = sec.short || sec.float || sec.title;
-    a.title = sec.float ? sec.float + ' \u00b7 ' + (sec.title || '') : (sec.title || '');
+    a.textContent = (sec.num ? sec.num + '. ' : '') + (sec.nav || sec.short || sec.title || '');
+    a.title = [sec.title || '', sec.paper ? 'paper ' + sec.paper : '', sec.float || ''].filter(Boolean).join(' \u00b7 ');
     nav.appendChild(a);
     main.appendChild(buildSection(sec));
   });
   document.getElementById('foot').innerHTML = D.footer_html || '';
-  Object.keys(SEC).forEach(sid => selectExample(sid, 0, {hash: false}));   // first example of every section
+  // first example of every panel: the hierarchy lands on retriever 1, its first case, rank 1
+  Object.keys(SEC).forEach(sid => SEC[sid].panels.forEach(P => P.select(P.idxs[0], {hash: false})));
   applyHash(true);
   window.addEventListener('hashchange', () => applyHash(true));
   // highlight the section in view
