@@ -115,7 +115,7 @@ a.xl:hover,a.xl:focus-visible{border-color:var(--acc);color:var(--acc)}
 .head .s{color:var(--muted);font-size:12.5px}
 .head .fid{flex:0 0 auto;font:700 11.5px/19px ui-monospace,Menlo,monospace;letter-spacing:.02em;color:var(--acc);
   background:var(--soft);border:1px solid var(--acc);border-radius:7px;padding:0 7px}
-/* verdict case of a memorization example (Figure 2 / Table 4): shown on the card head and on every chip */
+/* verdict case of a memorization example (Figure 2 / Table 3): shown on the card head and on every chip */
 .head .ccase{flex:0 0 auto;font-size:12px;font-weight:700;line-height:19px;color:var(--ink);
   border:1px solid var(--ink);border-radius:7px;padding:0 8px;white-space:nowrap}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 2px}
@@ -263,7 +263,7 @@ table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:1
 :root[data-theme="dark"] .fig3 .f3d{display:block}
 :root[data-theme="light"] .fig3 .f3l{display:block}
 :root[data-theme="light"] .fig3 .f3d{display:none}
-/* the float summary already prints "Table 4 - Human verdicts...", so the table's own
+/* the float summary already prints "Table 3 - Human verdicts...", so the table's own
    <caption> is kept for assistive technology (accessible table name) but not painted. */
 .pbody table.ptab>caption{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
   clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
@@ -296,6 +296,7 @@ const SYS = {ctx: 'Context', prompt: 'Prompt', ours: 'Ours', ace: 'ACE', real: '
 const SWL = {ours: 'Ours', ace: 'ACE', real: 'Real'};
 // Section id -> inline figure, used only if data.json carries no float blocks for the section.
 // Paper Figure 1 lives in the generation section, paper Figure 2 (verdict tree) in the memorization section.
+// Both are inlined by demo_build.py (D.figures.fig1_svg / D.figures.tree_svg) from the paper's own files.
 const FIG_AT = {gen: 'fig1', mem: 'tree'};
 // Section id -> card layout: figure = the figure-shaped player, list = the compact row list.
 const LAYOUT_AT = {gen: 'figure'};
@@ -494,71 +495,10 @@ function figConcept(){
   s += `</g></svg>`;
   return s;
 }
-function figTree(){
-  const q = (x, y, t1, t2) => `<g class="q"><rect x="${x}" y="${y}" width="280" height="56" rx="8"/>` +
-    `<text class="t1" x="${x + 140}" y="${y + (t2 ? 18 : 28)}" text-anchor="middle" dominant-baseline="central">${t1}</text>` +
-    (t2 ? `<text class="t2" x="${x + 140}" y="${y + 36}" text-anchor="middle" dominant-baseline="central">${t2}</text>` : '') + `</g>`;
-  const nd = (cls, x, y, w, t1, t2) => `<g class="${cls}"><rect x="${x}" y="${y}" width="${w}" height="56" rx="8"/>` +
-    `<text class="t1" x="${x + w / 2}" y="${y + (t2 ? 18 : 28)}" text-anchor="middle" dominant-baseline="central">${t1}</text>` +
-    (t2 ? `<text class="t2" x="${x + w / 2}" y="${y + 36}" text-anchor="middle" dominant-baseline="central">${t2}</text>` : '') + `</g>`;
-  const pill = (cls, x, y, w, t) => `<g class="b ${cls}"><rect x="${x}" y="${y}" width="${w}" height="18" rx="9"/><text x="${x + w / 2}" y="${y + 9}" text-anchor="middle" dominant-baseline="central">${t}</text></g>`;
-  const ln = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="e" marker-end="url(#tarr)"/>`;
-  const lb = (x, y, t, anchor) => `<text class="l" x="${x}" y="${y}" text-anchor="${anchor || 'middle'}" dominant-baseline="central">${t}</text>`;
-  const D = '&#183;';
-  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 8 760 606" role="img" aria-label="Verdict decision tree of the memorization audit">`;
-  s += `<defs><marker id="tarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`;
-  s += `<style>
-    .q rect{fill:var(--bg);stroke:var(--muted);stroke-width:.8}
-    .q .t1{font-size:14px;font-weight:650;fill:var(--ink)}
-    .q .t2,.n .t2,.bad .t2{font-size:11px;fill:var(--muted)}
-    .n rect{fill:var(--card);stroke:var(--hair);stroke-width:.8}
-    .n .t1{font-size:13.5px;font-weight:600;fill:var(--muted)}
-    .bad rect{fill:var(--soft);stroke:var(--acc);stroke-width:1.2}
-    .bad .t1{font-size:14px;font-weight:700;fill:var(--acc)}
-    .e{fill:none;stroke:var(--muted);stroke-width:1.2}
-    .l{font-size:11.5px;fill:var(--muted)}
-    .b rect{fill:var(--soft);stroke:var(--acc);stroke-width:.8}
-    .b text{font-size:11px;font-weight:700;fill:var(--acc)}
-    .b.g rect{fill:var(--card);stroke:var(--hair)} .b.g text{fill:var(--muted);font-weight:600}
-    .b.bl rect{fill:var(--card);stroke:var(--acc2)} .b.bl text{fill:var(--acc2)}
-    .memb rect{fill:var(--card);stroke:var(--acc2);stroke-width:1.2}
-    .memb .t1{fill:var(--acc2);font-weight:700}
-  </style></defs><g font-family="inherit">`;
-  s += q(236, 26, `0 ${D} Dataset stem duplicate?`, 'The same stem registered more than once');
-  s += pill('g', 400, 17, 126, `25 ${D} 100% ${D} 5.0%`);
-  s += ln(236, 54, 182, 54) + lb(208, 44, 'yes');
-  s += nd('n memb', 8, 26, 168, `A ${D} Duplicate`, 'Excluded');
-  s += pill('bl', 76, 17, 110, `10 ${D} 40% ${D} 2.0%`);
-  s += ln(376, 82, 376, 126) + lb(388, 100, 'no', 'start');
-  s += q(236, 126, `1 ${D} Same composition?`, 'Melody or chord progression matches');
-  s += pill('g', 408, 117, 118, `15 ${D} 60% ${D} 3.0%`);
-  s += ln(516, 154, 570, 154) + lb(543, 142, 'no');
-  s += nd('n', 576, 126, 168, `B ${D} Unrelated`, '');
-  s += pill('g', 636, 117, 118, `13 ${D} 52% ${D} 2.6%`);
-  s += ln(376, 182, 376, 226) + lb(388, 200, 'yes', 'start');
-  s += q(236, 226, `2 ${D} Commonplace pattern?`, 'One&#8211;two notes, a stock chord progression');
-  s += pill('g', 416, 217, 110, `2 ${D} 8% ${D} 0.4%`);
-  s += ln(516, 254, 570, 254) + lb(543, 242, 'yes');
-  s += nd('n', 576, 226, 168, `C ${D} Commonplace`, 'Not memorization');
-  s += pill('g', 644, 217, 110, `1 ${D} 4% ${D} 0.2%`);
-  s += ln(376, 282, 376, 326) + lb(388, 300, 'no', 'start');
-  s += q(236, 326, `3 ${D} Same timbre?`, 'Reproduced at the recording level');
-  s += pill('g', 424, 317, 102, `1 ${D} 4% ${D} 0.2%`);
-  s += ln(236, 354, 182, 354) + lb(208, 344, 'yes');
-  s += nd('bad', 8, 326, 168, `Type I ${D} Recording`, 'The recording reproduced');
-  s += pill('', 84, 317, 102, `1 ${D} 4% ${D} 0.2%`);
-  s += ln(376, 382, 376, 426) + lb(388, 400, 'no &#8594; composition memorization', 'start');
-  s += q(236, 426, `4 ${D} Core compositional element?`, 'Judged inside the mix');
-  s += pill('g', 432, 417, 94, `0 ${D} 0% ${D} 0%`);
-  s += ln(316, 482, 240, 540) + ln(436, 482, 520, 540) + lb(252, 502, 'yes') + lb(508, 502, 'no');
-  s += nd('bad', 98, 544, 264, `Type II ${D} Composition`, 'Core element copied');
-  s += pill('g', 278, 535, 94, `0 ${D} 0% ${D} 0%`);
-  s += nd('n memb', 405, 544, 264, `D ${D} Incidental`, 'Composition memorized; no infringement');
-  s += pill('g', 585, 535, 94, `0 ${D} 0% ${D} 0%`);
-  s += `</g></svg>`;
-  return s;
-}
-const FIGS = {fig1: () => (D.figures && D.figures.fig1_svg) || figConcept(), tree: figTree};
+// Inline figures shipped in data.json. Figure 1 falls back to the schematic drawn above; the verdict tree
+// (paper Figure 2, template/decision_tree_v3.svg) has no fallback - without it the float block is skipped.
+const FIGS = {fig1: () => (D.figures && D.figures.fig1_svg) || figConcept(),
+              tree: () => (D.figures && D.figures.tree_svg) || ''};
 
 // -- paper float blocks (collapsible; the reader can look at the float while listening) --
 function floatBlock(blk){
@@ -571,7 +511,8 @@ function floatBlock(blk){
   const body = document.createElement('div');
   body.className = 'pbody ' + (kind === 'table' ? 'ptabs' : 'pfig');
   const figKey = blk.figure || '';
-  if (figKey && FIGS[figKey]) body.innerHTML = FIGS[figKey]();
+  const fig = (figKey && FIGS[figKey]) ? FIGS[figKey]() : '';
+  if (fig) body.innerHTML = fig;
   else if (blk.html) body.innerHTML = kind === 'table' ? '<div class="ptw">' + blk.html + '</div>' : blk.html;
   else return null;
   if (blk.caption) body.insertAdjacentHTML('beforeend', `<div class="pcap">${blk.caption}</div>`);
@@ -609,7 +550,7 @@ function detStrip(c){
 }
 function cardHead(c){
   // The chip is the paper-float identifier of the card (T2.3); it falls back to the raw card id.
-  // A memorization example also prints its verdict case (Figure 2 / Table 4) next to that identifier.
+  // A memorization example also prints its verdict case (Figure 2 / Table 3) next to that identifier.
   let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span>` +
     (c.case ? `<span class="ccase">${esc(c.case)}</span>` : '') + `<span class="i">${esc(c.title)}</span>`;
   if (c.sub) h += `<span class="s">${esc(c.sub)}</span>`;
@@ -716,7 +657,7 @@ function selectExample(sid, idx, opts){
   if (opts.focus && st.chips[idx]) st.chips[idx].focus({preventScroll: true});
   if (opts.hash !== false) setHash(sid + '-' + (st.sec.cards[idx].label || st.sec.cards[idx].id));
 }
-// sec.cases = [{case, count, cards, note}] -> the audit's case coverage, drawn under the Table 4 block.
+// sec.cases = [{case, count, cards, note}] -> the audit's case coverage, drawn under the Table 3 block.
 // The cases with count 0 are a result of the audit ("none found"), so their rows are printed, not hidden.
 function caseTable(sec){
   const rows = (sec.cases || []).filter(r => r && r.case);
@@ -790,7 +731,7 @@ function buildSwitcher(sec){
 // -- page --
 function buildSection(sec){
   const s = document.createElement('section'); s.id = sec.id;
-  // Heading = the paper-float identifiers of the section (e.g. "Figure 2 + Table 4 + Figure 3") and its title.
+  // Heading = the paper-float identifiers of the section (e.g. "Figure 2 + Table 3 + Figure 3") and its title.
   const hd = document.createElement('div'); hd.className = 'shead';
   if (sec.float){ const ch = document.createElement('span'); ch.className = 'fchip'; ch.textContent = sec.float; hd.appendChild(ch); }
   const h = document.createElement('h2'); h.textContent = sec.title || sec.float_title || ''; hd.appendChild(h);
@@ -806,10 +747,10 @@ function buildSection(sec){
   blocks.forEach(b => {
     const el = floatBlock(b);
     if (el) s.appendChild(el);
-    // The coverage table is the reading of Table 4, so it sits right under that block.
-    if (el && cases && !placed && (b.key === 't4' || /table\s*4/i.test(b.label || ''))){ s.appendChild(cases); placed = true; }
+    // The coverage table is the reading of the audit table (Table 3), so it sits right under that block.
+    if (el && cases && !placed && (b.key === 't3' || /table\s*3/i.test(b.label || ''))){ s.appendChild(cases); placed = true; }
   });
-  if (cases && !placed) s.appendChild(cases);      // no Table 4 block on the page: keep the result visible
+  if (cases && !placed) s.appendChild(cases);      // no audit table on the page: keep the result visible
   if ((sec.cards || []).length){
     const sw = buildSwitcher(sec);
     s.appendChild(sw.wrap);
@@ -821,7 +762,7 @@ function buildSection(sec){
   return s;
 }
 function findExample(sid, label){
-  // Index of the example whose paper identifier (T4.3) or card id (t4_3) matches, else -1.
+  // Index of the example whose paper identifier (T3.3) or card id (t3_3) matches, else -1.
   const st = SEC[sid], lab = String(label == null ? '' : label).toLowerCase();
   if (!st || !lab) return -1;
   const cards = st.sec.cards || [];
@@ -836,7 +777,7 @@ function gotoExample(sid, label){
   return true;
 }
 function applyHash(scroll){
-  // '#<section>-<identifier>', e.g. '#mem-T4.3'; a plain '#<section>' is left to the browser anchor.
+  // '#<section>-<identifier>', e.g. '#mem-T3.3'; a plain '#<section>' is left to the browser anchor.
   const h = decodeURIComponent(String(location.hash || '').replace(/^#/, ''));
   const m = /^([A-Za-z0-9]+)-(.+)$/.exec(h);
   if (!m) return false;
@@ -861,7 +802,7 @@ function render(){
   const nav = document.getElementById('navLinks'); nav.innerHTML = '';
   const main = document.getElementById('main'); main.innerHTML = '';
   (D.sections || []).forEach(sec => {
-    // Nav carries the short float identifiers: Fig 1, T1, T2, T3, Fig 2 + T4 + Fig 3, Notes.
+    // Nav carries the short float identifiers: Fig 1, T1, T2, Fig 2 + T3 + Fig 3, Notes.
     const a = document.createElement('a'); a.className = 'lnk'; a.href = '#' + sec.id;
     a.textContent = sec.short || sec.float || sec.title;
     a.title = sec.float ? sec.float + ' \u00b7 ' + (sec.title || '') : (sec.title || '');
