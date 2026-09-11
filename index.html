@@ -430,11 +430,18 @@ function genRow(label, paint, opts, extraClass, cap){
   const w = wireRow(div, clip);
   div.querySelectorAll('.sw button').forEach(b => b.onclick = () => {
     if (b.dataset.k === curKey) return;
-    if (current && current.args[1] === div) stopAll();
+    // Switching systems while this row plays keeps it playing, from the same playhead: the clips share
+    // the section's time axis, so ours / ACE / real can be compared without restarting.
+    let at = null;
+    if (current && current.args[1] === div){ at = current.pos ? current.pos() : 0; stopAll(); }
     curKey = b.dataset.k;
     div.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x === b));
     div.querySelector('.dur').innerHTML = dur();
     w[1] = clip()[1]; drawWave(w[0], w[1]);
+    if (at !== null){
+      const len = Number(clip()[2]) || 0;
+      playRow('audio/' + clip()[0] + '.mp3', div, w[0], w[1], Math.max(0, Math.min(at, Math.max(0, len - 0.05))));
+    }
   });
   return div;
 }
