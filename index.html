@@ -589,6 +589,10 @@ function detStrip(c){
     `<div class="dgrid">${cells}</div><div class="dleg">${leg}</div></div>`;
 }
 function cardHead(c){
+  // A card reached through the retriever hierarchy repeats nothing: its identifier, verdict case, rank and
+  // instrument are already on the level buttons and the selected chip (user, 2026-09-12). Only the
+  // six-detector strip stays above the audio.
+  if (c.retriever_key) return detStrip(c);
   // The chip is the paper-float identifier of the card (T2.3); it falls back to the raw card id.
   // A memorization example also prints its verdict case (Figure 2 / Table 3) next to that identifier.
   let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span>` +
