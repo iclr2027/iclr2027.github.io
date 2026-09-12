@@ -177,7 +177,8 @@ table.mtab .meh{color:var(--muted)}
 .group{margin-top:8px;padding-top:6px;border-top:1px dashed var(--hair)}
 .group:first-of-type{border-top:0}
 .glab{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:1px}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px}
+/* one audio row per line, full width (user, 2026-09-12) */
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
 .row{display:flex;gap:7px;align-items:center;padding:2px 0;min-width:0;--sc:var(--acc);--sct:var(--acc)}
 .play{width:28px;height:28px;min-width:28px;border-radius:50%;border:1.5px solid var(--sc);
   background:transparent;color:var(--sct);font-size:10px;cursor:pointer;padding:0}
@@ -577,16 +578,10 @@ function detStrip(c){
       `<span class="dn"><span class="dm">${on ? DOT : ''}</span>${esc(d.name)}</span>` +
       `<span class="dv">${dnum(d.value)}</span><span class="dc">${op} ${dnum(d.cut)}</span></div>`;
   }).join('');
-  const nm = a => a.map(d => esc(d.name)).join(' / ');
-  const fired = ds.filter(d => d.flagged), dist = ds.filter(d => d.distance), sim = ds.filter(d => !d.distance);
-  let leg = fired.length ? `<b>Fired: ${fired.map(d => esc(d.name)).join(', ')}</b> (${fired.length} of ${ds.length}, marked ${DOT}).`
-                         : `<b>No detector fired</b> (0 of ${ds.length}).`;
-  if (dist.length) leg += ` Distance detectors ${nm(dist)} fire when the value is at or below the threshold` +
-    (sim.length ? `; ${nm(sim)} when it is at or above.` : '.');
-  else if (sim.length) leg += ` ${nm(sim)} fire when the value is at or above the threshold.`;
+  // No legend line (user, 2026-09-12): the fired cells are already marked in the strip itself.
   return `<div class="dstrip" role="group" aria-label="detector scores">` +
-    `<div class="dslab">Detector scores <span>the six detectors of the audit, for this example</span></div>` +
-    `<div class="dgrid">${cells}</div><div class="dleg">${leg}</div></div>`;
+    `<div class="dslab">Detector scores</div>` +
+    `<div class="dgrid">${cells}</div></div>`;
 }
 function cardHead(c){
   // A card reached through the retriever hierarchy repeats nothing: its identifier, verdict case, rank and
