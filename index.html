@@ -685,13 +685,13 @@ const LEVELS = {
   retriever: {head: 'Retriever', mono: false,
     key: c => c.retriever_key || slug(c.retriever), name: c => c.retriever || titleize(c.retriever_key),
     sub: cs => { const t = Number((cs.filter(c => Number(c.rank_total) > 0)[0] || {}).rank_total);
-                 return t > 0 ? t + ' flagged stems' : ''; }},
+                 return t > 0 ? t + ' flagged' : ''; }},
   case: {head: 'Human verdict', mono: false,
     key: c => slug(c.case), name: c => c.case || '',
     // How many of the retriever's flagged stems got this verdict (paper Table 3), then how many are here.
-    sub: cs => { const ex = cs.length + (cs.length === 1 ? ' example' : ' examples');
-                 const c0 = cs.filter(c => Number(c.case_total) > 0 && Number(c.rank_total) > 0)[0];
-                 return c0 ? Number(c0.case_total) + ' of ' + Number(c0.rank_total) + ' flagged, ' + ex : ex; }},
+    // Just the count of flagged stems with this verdict (paper Table 3); the total sits on the retriever button.
+    sub: cs => { const c0 = cs.filter(c => Number(c.case_total) > 0)[0];
+                 return c0 ? String(Number(c0.case_total)) : ''; }},
   block: {head: '', mono: true,
     key: c => c.block || '', name: c => c.block || '', sub: cs => cs[0].block_title || ''},
 };
