@@ -541,7 +541,6 @@ function floatBlock(blk){
 // Six-detector score strip: the six detectors of the audit (the same names and thresholds the paper reports),
 // for this one example. c.detectors = [{det, name, value, cut, flagged, distance}] in the order cards.json
 // gives them (the audit's order); absent -> nothing is drawn.
-const DOT = '\u25CF';                                     // the non-colour "this detector fired" cue
 const dnum = v => { const x = Number(v); return Math.abs(x) >= 100 ? x.toFixed(1) : x.toFixed(3); };
 // c.moves = [{metric, statement, expect, cells:[{system, base, swap, delta}]}] - what the swap did to the
 // measurements the paper's Table 2 reports. 'expect' is the paper's hypothesis for this row.
@@ -575,7 +574,7 @@ function detStrip(c){
     const tip = `${d.name} ${dnum(d.value)}, threshold ${op} ${dnum(d.cut)} (${d.distance ? 'distance' : 'similarity'}): ` +
       (on ? 'fired' : 'did not fire');
     return `<div class="dcell${on ? ' hit' : ''}" title="${esc(tip)}">` +
-      `<span class="dn"><span class="dm">${on ? DOT : ''}</span>${esc(d.name)}</span>` +
+      `<span class="dn">${esc(d.name)}</span>` +
       `<span class="dv">${dnum(d.value)}</span><span class="dc">${op} ${dnum(d.cut)}</span></div>`;
   }).join('');
   // No legend line (user, 2026-09-12): the fired cells are already marked in the strip itself.
