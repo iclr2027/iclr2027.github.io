@@ -980,7 +980,7 @@ function render(){
     main.querySelectorAll('section').forEach(s => io.observe(s));
   }
 }
-fetch('data.json', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+fetch('data.json?v=8f1049ee', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
   .catch(e => { const el = document.getElementById('loadMsg');
     if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
