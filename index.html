@@ -179,6 +179,13 @@ table.mtab .meh{color:var(--muted)}
 .glab{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:1px}
 /* one audio row per line, full width (user, 2026-09-12) */
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+/* per-row detector reading (regeneration seeds): name + value pill, filled when it reproduces the training stem */
+.scp{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:6px;margin-left:8px;padding:0 9px;line-height:24px;
+  border:1px solid var(--hair);border-radius:12px;background:var(--bg);color:var(--muted);white-space:nowrap}
+.scp .scn{font-size:10.5px;font-weight:700;letter-spacing:.03em}
+.scp .scv{font:700 12.5px/24px ui-monospace,Menlo,monospace;color:var(--ink)}
+.scp.hit{border-color:var(--acc);background:var(--soft)}
+.scp.hit .scn,.scp.hit .scv{color:var(--acc)}
 .row{display:flex;gap:7px;align-items:center;padding:2px 0;min-width:0;--sc:var(--acc);--sct:var(--acc)}
 .play{width:28px;height:28px;min-width:28px;border-radius:50%;border:1.5px solid var(--sc);
   background:transparent;color:var(--sct);font-size:10px;cursor:pointer;padding:0}
@@ -425,9 +432,13 @@ function audioRow(row){
   const sys = /^[a-z]+$/.test(row.sys || '') ? row.sys : 'ref';
   const div = document.createElement('div');
   div.className = 'row'; div.dataset.sys = sys;
+  const sc = row.score && isFinite(Number(row.score.value)) ? row.score : null;
+  const pill = sc ? `<span class="scp${sc.hit ? ' hit' : ''}" title="${esc(sc.name)} distance to the retrieved training stem` +
+    (sc.cut != null ? `, reproduces at or below ${esc(sc.cut)}` : '') + `"><span class="scn">${esc(sc.name)}</span>` +
+    `<span class="scv">${esc(Number(sc.value).toFixed(2))}</span></span>` : '';
   div.innerHTML = `<button class="play" type="button" title="play / stop" aria-label="play ${esc(row.label)}">${PLAY}</button>` +
     `<div class="rlab"><span class="sys ${sys}">${esc(SYS[sys] || sys)}</span>${esc(row.label)} <span class="dur">${esc(dur)} s</span></div>` +
-    `<canvas class="wave" title="play from here"></canvas>`;
+    `<canvas class="wave" title="play from here"></canvas>` + pill;
   wireRow(div, () => row.clip);
   return div;
 }
@@ -587,6 +598,7 @@ function cardHead(c){
   // instrument are already on the level buttons and the selected chip (user, 2026-09-12). Only the
   // six-detector strip stays above the audio.
   if (c.retriever_key) return detStrip(c);
+  if (c.kind === 'regen') return '';   // the same stem's detector strip is on its T3 card already
   // The chip is the paper-float identifier of the card (T2.3); it falls back to the raw card id.
   // A memorization example also prints its verdict case (Figure 2 / Table 3) next to that identifier.
   let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span>` +
