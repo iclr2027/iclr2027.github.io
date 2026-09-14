@@ -309,7 +309,7 @@ table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:1
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
 
-<footer id="foot"></footer><div class="muted" id="stamp">build 8f1049ee</div>
+<footer id="foot"></footer><div class="muted" id="stamp">build d6016bdc</div>
 
 <script>
 'use strict';
@@ -600,8 +600,8 @@ function cardHead(c){
   // A card reached through the retriever hierarchy repeats nothing: its identifier, verdict case, rank and
   // instrument are already on the level buttons and the selected chip (user, 2026-09-12). Only the
   // six-detector strip stays above the audio.
-  if (c.kind === 'regen') return '';   // no detector strip here: the same stem's strip is on its T3 card
-  if (c.retriever_key) return detStrip(c);
+  if (c.retriever_key && c.kind !== 'regen') return detStrip(c);
+  const noStrip = c.kind === 'regen';   // regeneration cards: head + badges, but no detector strip (it is on the T3 card)
   // The chip is the paper-float identifier of the card (T2.3); it falls back to the raw card id.
   // A memorization example also prints its verdict case (Figure 2 / Table 3) next to that identifier.
   let h = `<div class="head"><span class="fid">${esc(c.label || c.id)}</span>` +
@@ -614,7 +614,7 @@ function cardHead(c){
       (b.value === undefined || b.value === null || b.value === '' ? '' : `<span class="bv">${esc(b.value)}</span>`) + '</span>').join('') + '</div>';
   }
   if (c.note) h += `<div class="note">${c.note}</div>`;
-  h += detStrip(c);
+  if (!noStrip) h += detStrip(c);
   h += moveTable(c);
   return h;
 }
@@ -980,7 +980,7 @@ function render(){
     main.querySelectorAll('section').forEach(s => io.observe(s));
   }
 }
-fetch('data.json?v=8f1049ee', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+fetch('data.json?v=d6016bdc', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
   .catch(e => { const el = document.getElementById('loadMsg');
     if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
