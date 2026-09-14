@@ -309,7 +309,7 @@ table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:1
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
 
-<footer id="foot"></footer><div class="muted" id="stamp">build d6016bdc</div>
+<footer id="foot"></footer><div class="muted" id="stamp">build 75078546</div>
 
 <script>
 'use strict';
@@ -980,7 +980,7 @@ function render(){
     main.querySelectorAll('section').forEach(s => io.observe(s));
   }
 }
-fetch('data.json?v=d6016bdc', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+fetch('data.json?v=75078546', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
   .catch(e => { const el = document.getElementById('loadMsg');
     if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
