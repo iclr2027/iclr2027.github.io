@@ -178,6 +178,22 @@ table.mtab .meh{color:var(--muted)}
 .group:first-of-type{border-top:0}
 .glab{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:1px}
 /* one audio row per line, full width (user, 2026-09-12) */
+/* private listening review: keep / drop / note per example, status dots on chips, one copy button */
+#rvbar{position:sticky;top:var(--navh);z-index:40;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  background:var(--card);border:1px solid var(--hair);border-radius:10px;padding:7px 12px;margin:8px 0 0;font-size:13px}
+#rvbar .cnt b{font-family:ui-monospace,Menlo,monospace}
+#rvbar button{font-family:inherit;font-size:12.5px;padding:3px 11px;border:1px solid var(--hair);border-radius:8px;background:var(--bg);color:var(--ink);cursor:pointer}
+#rvbar button.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+.rv{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 8px;padding:7px 10px;border:1px dashed var(--hair);border-radius:9px;background:var(--bg)}
+.rv .rid{font:700 12px/22px ui-monospace,Menlo,monospace;color:var(--muted)}
+.rv .cur{font-size:11px;color:var(--muted)}
+.rv button{font-family:inherit;font-size:12px;line-height:22px;padding:0 10px;border:1px solid var(--hair);border-radius:8px;background:var(--card);color:var(--muted);cursor:pointer}
+.rv button.keep.on{background:var(--good);border-color:var(--good);color:#fff;font-weight:700}
+.rv button.drop.on{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:700}
+.rv input{flex:1 1 220px;min-width:160px;font:12.5px/22px inherit;padding:0 8px;border:1px solid var(--hair);border-radius:8px;background:var(--card);color:var(--ink)}
+.chip .rvd{width:8px;height:8px;border-radius:50%;background:var(--hair);align-self:center}
+.chip .rvd.keep{background:var(--good)}
+.chip .rvd.drop{background:var(--bad)}
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
 /* two-column groups (Table 2: prompts side by side, ours left / ACE right) */
 .grid.cols2{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 16px}
@@ -316,7 +332,7 @@ table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:1
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
 
-<footer id="foot"></footer><div class="muted" id="stamp">build 27974abc</div>
+<footer id="foot"></footer><div class="muted" id="stamp">build 6e35fba2</div>
 
 <script>
 'use strict';
@@ -700,10 +716,58 @@ function buildGenCard(c){
   card.appendChild(fig);
   return card;
 }
+// -- private listening review (D.review): decisions live in this browser, copied out as plain text --
+const RV_KEY = 'iclr_review_v1';
+function rvLoad(){ try { return JSON.parse(localStorage.getItem(RV_KEY) || '{}'); } catch (e) { return {}; } }
+function rvSave(st){ localStorage.setItem(RV_KEY, JSON.stringify(st)); rvRefresh(); }
+function rvAll(){ const out = []; (D.sections || []).forEach(s => (s.cards || []).forEach(c => out.push(c))); return out; }
+function rvRefresh(){
+  const st = rvLoad(), cards = rvAll();
+  let k = 0, d = 0;
+  cards.forEach(c => { const v = st[c.id] || {}; if (v.s === 'keep') k++; else if (v.s === 'drop') d++; });
+  const el = document.getElementById('rvcnt');
+  if (el) el.innerHTML = `<b>${k}</b> keep &nbsp; <b>${d}</b> drop &nbsp; <b>${cards.length - k - d}</b> undecided &nbsp; of ${cards.length}`;
+  document.querySelectorAll('.chip[data-cid]').forEach(ch => {
+    const v = st[ch.dataset.cid] || {}; let dot = ch.querySelector('.rvd');
+    if (!dot){ dot = document.createElement('span'); dot.className = 'rvd'; ch.insertBefore(dot, ch.firstChild); }
+    dot.className = 'rvd' + (v.s ? ' ' + v.s : '');
+  });
+}
+function rvText(){
+  const st = rvLoad(), cards = rvAll(), keep = [], drop = [], und = [], notes = [];
+  cards.forEach(c => { const v = st[c.id] || {};
+    (v.s === 'keep' ? keep : v.s === 'drop' ? drop : und).push(c.id);
+    if (v.n && v.n.trim()) notes.push('note ' + c.id + ': ' + v.n.trim().replace(/\s+/g, ' ')); });
+  return ['keep ' + keep.join(' '), 'drop ' + drop.join(' '), 'undecided ' + und.join(' ')].concat(notes).join('\n') + '\n';
+}
+function rvCopy(){
+  const t = rvText();
+  const done = () => { const b = document.getElementById('rvcopy'); if (b){ b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy selection'; }, 1500); } };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, () => rvFallback(t, done));
+  else rvFallback(t, done);
+}
+function rvFallback(t, done){ const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta); done(); }
+function rvStrip(c){
+  const st = rvLoad(), v = st[c.id] || {};
+  const div = document.createElement('div'); div.className = 'rv';
+  div.innerHTML = `<span class="rid">${esc(c.id)}</span><span class="cur">now: ${esc(c.status || 'keep')}</span>` +
+    `<button type="button" class="keep${v.s === 'keep' ? ' on' : ''}">Keep</button>` +
+    `<button type="button" class="drop${v.s === 'drop' ? ' on' : ''}">Drop</button>` +
+    `<input type="text" placeholder="note (optional)" value="${esc(v.n || '')}">`;
+  const set = s => { const st2 = rvLoad(); st2[c.id] = Object.assign({}, st2[c.id] || {}, {s: s}); rvSave(st2);
+    div.querySelector('.keep').classList.toggle('on', s === 'keep'); div.querySelector('.drop').classList.toggle('on', s === 'drop'); };
+  div.querySelector('.keep').onclick = () => set((rvLoad()[c.id] || {}).s === 'keep' ? '' : 'keep');
+  div.querySelector('.drop').onclick = () => set((rvLoad()[c.id] || {}).s === 'drop' ? '' : 'drop');
+  div.querySelector('input').oninput = ev => { const st2 = rvLoad(); st2[c.id] = Object.assign({}, st2[c.id] || {}, {n: ev.target.value}); localStorage.setItem(RV_KEY, JSON.stringify(st2)); };
+  div.addEventListener('keydown', ev => ev.stopPropagation());   // typing a note must not drive the player or the switcher
+  return div;
+}
 function buildBody(sec, card){
   const layout = sec.layout || LAYOUT_AT[sec.id] || 'list';
   WCOL = [];
   const node = layout === 'figure' ? buildGenCard(card) : buildCard(card);
+  if (D.review) node.insertBefore(rvStrip(card), node.firstChild);
   node.waves = WCOL;
   WCOL = null;
   return node;
@@ -828,6 +892,7 @@ function buildPanel(sec, idxs, lvNames, opts){
       (c.hint ? `<span class="chint">${esc(c.hint)}</span>` : '') +
       (rank ? `<span class="crank">${esc(rank)}</span>` : '');
     b.onclick = () => P.select(gi, {focus: true});
+    b.dataset.cid = c.id;
     P.chips.push(b);
     wrap.appendChild(b);
   });
@@ -980,6 +1045,14 @@ function render(){
       '<br><span class="muted">' + affs.map((x, i) => `<sup>${i + 1}</sup>${esc(x)}`).join(' &nbsp; ') + '</span>';
   } else au.textContent = 'Anonymous authors';
   document.getElementById('subtitle').innerHTML = D.subtitle || '';
+  if (D.review){
+    const bar = document.createElement('div'); bar.id = 'rvbar';
+    bar.innerHTML = '<span class="cnt" id="rvcnt"></span><span class="sp" style="flex:1"></span>' +
+      '<button type="button" class="pri" id="rvcopy">Copy selection</button>';
+    document.getElementById('subtitle').insertAdjacentElement('afterend', bar);
+    document.getElementById('rvcopy').onclick = rvCopy;
+    setTimeout(rvRefresh, 0);
+  }
   document.getElementById('overview').innerHTML = D.overview_html || '';
   const nav = document.getElementById('navLinks'); nav.innerHTML = '';
   const main = document.getElementById('main'); main.innerHTML = '';
@@ -1005,7 +1078,7 @@ function render(){
     main.querySelectorAll('section').forEach(s => io.observe(s));
   }
 }
-fetch('data.json?v=27974abc', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+fetch('data.json?v=6e35fba2', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
   .catch(e => { const el = document.getElementById('loadMsg');
     if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
