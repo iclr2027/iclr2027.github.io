@@ -180,6 +180,9 @@ table.mtab .meh{color:var(--muted)}
 /* one audio row per line, full width (user, 2026-09-12) */
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
 /* per-row detector reading (regeneration seeds): name + value pill, filled when it reproduces the training stem */
+.rlab.has-sc{display:flex;align-items:baseline;gap:5px;white-space:nowrap}   /* pills right-aligned at one x */
+.rlab.has-sc .lt{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.rlab.has-sc .scp{margin-left:auto}
 .scp{display:inline-flex;align-items:baseline;gap:5px;margin-left:8px;padding:0 7px;line-height:18px;vertical-align:1px;
   border:1px solid var(--hair);border-radius:9px;background:var(--bg);color:var(--muted);white-space:nowrap}
 .scp .scn{font-size:10px;font-weight:700;letter-spacing:.03em}
@@ -437,7 +440,7 @@ function audioRow(row){
     (sc.cut != null ? `, reproduces at or below ${esc(sc.cut)}` : '') + `"><span class="scn">${esc(sc.name)}</span>` +
     `<span class="scv">${esc(Number(sc.value).toFixed(2))}</span></span>` : '';
   div.innerHTML = `<button class="play" type="button" title="play / stop" aria-label="play ${esc(row.label)}">${PLAY}</button>` +
-    `<div class="rlab"><span class="sys ${sys}">${esc(SYS[sys] || sys)}</span>${esc(row.label)} <span class="dur">${esc(dur)} s</span>${pill}</div>` +
+    `<div class="rlab${sc ? ' has-sc' : ''}"><span class="sys ${sys}">${esc(SYS[sys] || sys)}</span><span class="lt">${esc(row.label)} <span class="dur">${esc(dur)} s</span></span>${pill}</div>` +
     `<canvas class="wave" title="play from here"></canvas>`;
   wireRow(div, () => row.clip);
   return div;
