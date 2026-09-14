@@ -469,12 +469,14 @@ function audioRow(row){
   return div;
 }
 // A figure-style row: colored, optional system switch selecting among {ours, ace, real} clips.
-function genRow(label, paint, opts, extraClass, cap){
+function genRow(label, paint, opts, extraClass, cap, link){
+  // link = {cur, rows, set}: rows of one card that switch together (user, 2026-09-14). Clicking Solo / Mix or
+  // ours / ACE / real on any row applies to every linked row that offers that key.
   const div = document.createElement('div');
   div.className = 'row g' + (extraClass ? ' ' + extraClass : '');
   div.style.setProperty('--sc', paint.acc); div.style.setProperty('--sct', paint.ink);
   const keys = Object.keys(opts);
-  let curKey = keys[0];
+  let curKey = (link && link.cur && keys.includes(link.cur)) ? link.cur : keys[0];
   const clip = () => opts[curKey].clip;
   const dur = () => (cap ? esc(cap) + ' &middot; ' : '') + esc(clip()[2]) + ' s';
   div.innerHTML = `<button class="play" type="button" title="play / stop" aria-label="play ${esc(label)}">${PLAY}</button>` +
@@ -483,21 +485,27 @@ function genRow(label, paint, opts, extraClass, cap){
     (keys.length > 1 ? '<div class="sw" role="group" aria-label="system">' +
       keys.map(k => `<button type="button" data-k="${esc(k)}" class="${k === curKey ? 'on' : ''}">${esc(SWL[k] || k)}</button>`).join('') + '</div>' : '');
   const w = wireRow(div, clip);
-  div.querySelectorAll('.sw button').forEach(b => b.onclick = () => {
-    if (b.dataset.k === curKey) return;
-    // Switching systems while this row plays keeps it playing, from the same playhead: the clips share
-    // the section's time axis, so ours / ACE / real can be compared without restarting.
+  const apply = k => {
+    if (!(k in opts) || k === curKey) return;
+    // Switching while this row plays keeps it playing, from the same playhead: the clips share the
+    // section's time axis, so the variants can be compared without restarting.
     let at = null;
     if (current && current.args[1] === div){ at = current.pos ? current.pos() : 0; stopAll(); }
-    curKey = b.dataset.k;
-    div.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x === b));
+    curKey = k;
+    div.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x.dataset.k === k));
     div.querySelector('.dur').innerHTML = dur();
     w[1] = clip()[1]; drawWave(w[0], w[1]);
     if (at !== null){
       const len = Number(clip()[2]) || 0;
       playRow('audio/' + clip()[0] + '.mp3', div, w[0], w[1], Math.max(0, Math.min(at, Math.max(0, len - 0.05))));
     }
-  });
+  };
+  if (link){
+    link.rows = link.rows || [];
+    link.rows.push(apply);
+    if (!link.set) link.set = k => { link.cur = k; link.rows.forEach(fn => fn(k)); };
+  }
+  div.querySelectorAll('.sw button').forEach(b => b.onclick = () => (link ? link.set(b.dataset.k) : apply(b.dataset.k)));
   return div;
 }
 // Paint of stem i: the accent is the Figure 1 pill stroke, the ink its pill text (see the token block).
@@ -644,6 +652,8 @@ function cardHead(c){
 function buildCard(c){
   const card = document.createElement('div'); card.className = 'card'; card.id = 'card-' + esc(c.id);
   card.innerHTML = cardHead(c);
+  // Solo / Mix switches of this card move together; a context-replaced card (block c) opens on the mix.
+  const link = {cur: c.block === 'c' ? 'mix' : 'solo', rows: []};
   (c.groups || []).forEach(g => {
     const rows = (g.rows || []).filter(r => Array.isArray(r.clip) && r.clip.length >= 3);
     if (!rows.length) return;
@@ -656,7 +666,7 @@ function buildCard(c){
       const mixRow = r.mix_key ? byKey[r.mix_key] : null;
       if (!mixRow) return audioRow(r);
       const paint = r.sys === 'ace' ? {acc: 'var(--vio)', ink: 'var(--vio)'} : {acc: 'var(--good)', ink: 'var(--good)'};
-      return genRow(r.label, paint, {solo: r, mix: mixRow}, 'lst');
+      return genRow(r.label, paint, {solo: r, mix: mixRow}, 'lst', undefined, link);
     };
     if (g.cols === 2){
       const grid = document.createElement('div'); grid.className = 'grid cols2';
@@ -702,16 +712,17 @@ function buildGenCard(c){
   mid.innerHTML = '<div class="gbr"><span class="h"></span></div>';
   const right = document.createElement('div'); right.className = 'gpanel right';
   right.innerHTML = `<div class="ptitle">Generated stem${one ? '' : 's'}</div>`;
+  const link = {cur: 'ours', rows: []};   // ours / ACE / real: every generated row and the mix switch together
   stems.forEach((st, i) => {
     left.appendChild(genRow(st.label, stemPaint(i), {prompt: rows['p_' + st.g]}, '', 'prompt'));
     const o = pick(st.g);
-    if (Object.keys(o).length) right.appendChild(genRow(st.label, stemPaint(i), o));
+    if (Object.keys(o).length) right.appendChild(genRow(st.label, stemPaint(i), o, '', undefined, link));
   });
   left.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
   left.appendChild(genRow('Context', CTX_PAINT, {ctx: ctx}, '', 'given'));
   right.insertAdjacentHTML('beforeend', '<div class="pspace"></div>');
   const mo = {}; ['ours', 'ace', 'real'].forEach(s => { if (rows['mix_' + s]) mo[s] = rows['mix_' + s]; });
-  if (Object.keys(mo).length) right.appendChild(genRow(one ? 'Full mix' : 'One mix', MIX_PAINT, mo, 'mix'));
+  if (Object.keys(mo).length) right.appendChild(genRow(one ? 'Full mix' : 'One mix', MIX_PAINT, mo, 'mix', undefined, link));
   fig.appendChild(left); fig.appendChild(mid); fig.appendChild(right);
   card.appendChild(fig);
   return card;
