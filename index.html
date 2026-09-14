@@ -179,6 +179,13 @@ table.mtab .meh{color:var(--muted)}
 .glab{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase;margin-bottom:1px}
 /* one audio row per line, full width (user, 2026-09-12) */
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+/* two-column groups (Table 2: prompts side by side, ours left / ACE right) */
+.grid.cols2{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 16px}
+.gcol{min-width:0}
+.colh{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:2px 0 3px}
+.grid.cols2 .rlab{min-width:150px;max-width:150px}
+.row.g.lst{margin:3px 0}
+.row.g.lst .rlab{width:96px}
 /* per-row detector reading (regeneration seeds): name + value pill, filled when it reproduces the training stem */
 .rlab.has-sc{display:flex;align-items:baseline;gap:5px;white-space:nowrap}   /* pills right-aligned at one x */
 .rlab.has-sc .lt{min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -309,7 +316,7 @@ table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:1
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
 
-<footer id="foot"></footer><div class="muted" id="stamp">build 75078546</div>
+<footer id="foot"></footer><div class="muted" id="stamp">build 27974abc</div>
 
 <script>
 'use strict';
@@ -320,7 +327,7 @@ const WAVES = [];                // [canvas, peaks] of every wired row (detached
 let WCOL = null;                 // while a card body is being built: collect its waves
 const PLAY = '\u25B6', PAUSE = '\u275A\u275A';
 const SYS = {ctx: 'Context', prompt: 'Prompt', ours: 'Ours', ace: 'ACE', real: 'Real', mix: 'Mix', hit: 'Training match', regen: 'Regenerated', ref: 'Reference'};
-const SWL = {ours: 'Ours', ace: 'ACE', real: 'Real'};
+const SWL = {ours: 'Ours', ace: 'ACE', real: 'Real', solo: 'Solo', mix: 'Mix'};
 // Section id -> inline figure, used only if data.json carries no float blocks for the section.
 // Paper Figure 1 lives in the generation section, paper Figure 2 (verdict tree) in the memorization section.
 // Both are inlined by demo_build.py (D.figures.fig1_svg / D.figures.tree_svg) from the paper's own files.
@@ -626,8 +633,26 @@ function buildCard(c){
     if (!rows.length) return;
     const gd = document.createElement('div'); gd.className = 'group';
     if (g.label){ const gl = document.createElement('div'); gl.className = 'glab'; gl.textContent = g.label; gd.appendChild(gl); }
+    const byKey = {}; rows.forEach(r => { byKey[r.key] = r; });
+    const visible = rows.filter(r => !r.hidden);
+    // A row with a mix variant (Table 2 generated stems) becomes a switchable row: solo | in the mix.
+    const mk = r => {
+      const mixRow = r.mix_key ? byKey[r.mix_key] : null;
+      if (!mixRow) return audioRow(r);
+      const paint = r.sys === 'ace' ? {acc: 'var(--vio)', ink: 'var(--vio)'} : {acc: 'var(--good)', ink: 'var(--good)'};
+      return genRow(r.label, paint, {solo: r, mix: mixRow}, 'lst');
+    };
+    if (g.cols === 2){
+      const grid = document.createElement('div'); grid.className = 'grid cols2';
+      const cols = [0, 1].map(i => { const d = document.createElement('div'); d.className = 'gcol'; return d; });
+      (g.col_labels || []).forEach((t, i) => { if (cols[i] && t){ const h = document.createElement('div'); h.className = 'colh'; h.textContent = t; cols[i].appendChild(h); } });
+      visible.forEach(r => cols[r.col === 1 ? 1 : 0].appendChild(mk(r)));
+      cols.forEach(d => grid.appendChild(d));
+      gd.appendChild(grid); card.appendChild(gd);
+      return;
+    }
     const grid = document.createElement('div'); grid.className = 'grid';
-    rows.forEach(r => grid.appendChild(audioRow(r)));
+    visible.forEach(r => grid.appendChild(mk(r)));
     gd.appendChild(grid); card.appendChild(gd);
   });
   return card;
@@ -980,7 +1005,7 @@ function render(){
     main.querySelectorAll('section').forEach(s => io.observe(s));
   }
 }
-fetch('data.json?v=75078546', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+fetch('data.json?v=27974abc', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
   .catch(e => { const el = document.getElementById('loadMsg');
     if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
