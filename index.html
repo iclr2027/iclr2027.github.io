@@ -363,7 +363,7 @@ table.ptab tfoot td,table.ptab tfoot th{border-top:0;padding-top:5px;font-size:1
 
 <main id="main"><p id="loadMsg" class="muted">Loading&hellip;</p></main>
 
-<footer id="foot"></footer><div class="muted" id="stamp">build bb52ac29</div>
+<footer id="foot"></footer><div class="muted" id="stamp">build db211ed7</div>
 
 <script>
 'use strict';
@@ -1248,7 +1248,11 @@ function render(){
   });
   document.getElementById('foot').innerHTML = D.footer_html || '';
   // first example of every panel: the hierarchy lands on retriever 1, its first case, rank 1
-  Object.keys(SEC).forEach(sid => SEC[sid].panels.forEach(P => { if (!P.ranked) P.select(P.idxs[0], {hash: false}); }));  // ranked list: all rows closed
+  Object.keys(SEC).forEach(sid => SEC[sid].panels.forEach(P => {
+    if (P.ranked) return;                                   // ranked list: all rows closed
+    const want = SEC[sid].sec.default ? P.idxs.filter(gi => SEC[sid].sec.cards[gi].label === SEC[sid].sec.default)[0] : undefined;
+    P.select(want !== undefined ? want : P.idxs[0], {hash: false});   // sec.default = the card that opens first (E1.12)
+  }));
   applyHash(true);
   window.addEventListener('hashchange', () => applyHash(true));
   // highlight the section in view
@@ -1260,7 +1264,7 @@ function render(){
     main.querySelectorAll('section').forEach(s => io.observe(s));
   }
 }
-fetch('data.json?v=bb52ac29', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+fetch('data.json?v=db211ed7', {cache: 'no-cache'}).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(d => { D = d; render(); })
   .catch(e => { const el = document.getElementById('loadMsg');
     if (el) el.textContent = 'Could not load data.json (' + e + '). Serve this folder over HTTP.'; });
